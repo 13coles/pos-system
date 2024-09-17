@@ -1,0 +1,17 @@
+.nice-number {
+    justify-content: stretch;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.nice-number input {
+   text-align: center;
+}
+
+.nice-number input::-webkit-inner-spin-button,.nice-number input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
