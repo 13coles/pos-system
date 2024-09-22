@@ -106,7 +106,7 @@
                               } ?>"><a href="sales.php">Sales</a></li>
                 </ul>
               </li>
-              <li class="top_links <?php if ($page == 'user-profiles' || $page == 'settings' || $page == 'back-up') {
+              <!-- <li class="top_links <?php if ($page == 'user-profiles' || $page == 'settings' || $page == 'back-up') {
                                       echo 'active';
                                     } else {
                                       echo '';
@@ -118,18 +118,18 @@
                               } else {
                                 echo '';
                               } ?>"><a href="user-profiles.php">User profiles</a></li>
-                  <!-- <li class="<?php if ($page == 'back-up') {
+                  <li class="<?php if ($page == 'back-up') {
                                 echo 'active';
                               } else {
                                 echo '';
-                              } ?>"><a href="back-up.php">Back-up &amp; Restore</a></li> -->
+                              } ?>"><a href="back-up.php">Back-up &amp; Restore</a></li>
                   <li class="<?php if ($page == 'settings') {
                                 echo 'active';
                               } else {
                                 echo '';
                               } ?>"><a href="settings.php">Page settings</a></li>
                 </ul>
-              </li>
+              </li> -->
               <li>
                 <a>
                   <form method="POST" style="display: inline-flex">

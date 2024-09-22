@@ -30,20 +30,20 @@
               <li class="menu-item-has-children">
                 <a href="#"><i class='bx bx-category-alt  pb-1'></i>  Shop management </a>
                 <ul class="sub-menu">
-                  <li><a href="shop.php"><?php echo $system_info['system_title']; ?> Shop</a></li>
+                  <li><a href="brand.php">Brands</a></li>
                   <li><a href="shop-product.php">Product Management</a></li>
                   <li><a href="generate-reports.php">Generate QR</a></li>
                   <li><a href="sales.php">Sales</a></li>
                 </ul>
               </li>
-              <li class="menu-item-has-children">
+              <!-- <li class="menu-item-has-children">
                 <a href="#"><i class="bx bx-cog pb-1"></i> Settings </a>
                 <ul class="sub-menu">
                   <li><a href="user-profiles.php">User Profiles</a></li>
-                  <!-- <li><a href="back-up.php">Back-up &amp; Restore</a></li> -->
+                  <li><a href="back-up.php">Back-up &amp; Restore</a></li>
                   <li><a href="settings.php">Page Settings</a></li>
                 </ul>
-              </li>
+              </li> -->
             </ul>
           </div>
           <div class="Offcanvas_footer">

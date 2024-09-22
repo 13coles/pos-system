@@ -135,20 +135,19 @@ $get->dt_css();
             <div class="row">
               <label class="col-md-4 col-lg-3 col-form-label">Role</label>
               <div class="col-md-8 col-lg-9">
-                <select class="form-select pt-1 mb-3" style="border-radius: 0; border-color: none;" name="role">
-                  <?php
-                  $result_roles = $db->GR_roles();
-                  if (mysqli_num_rows($result_roles) > 0) {
-                    while ($row_roles = mysqli_fetch_array($result_roles)) {
-                  ?>
-                      <option <?php if ($row_roles['role'] == "ADMIN") {
-                                echo 'disabled';
-                              } ?>><?php echo $row_roles['role']; ?></option>
-                  <?php
-                    }
+              <select class="form-select pt-1 mb-3" style="border-radius: 0; border-color: none;" name="role">
+                <?php
+                $result_roles = $db->GR_roles();
+                if (mysqli_num_rows($result_roles) > 0) {
+                  while ($row_roles = mysqli_fetch_array($result_roles)) {
+                ?>
+                    <option><?php echo $row_roles['role']; ?></option>
+                <?php
                   }
-                  ?>
-                </select>
+                }
+                ?>
+              </select>
+
               </div>
               <div class="col-12">
                 <div class="alert alert-info mb-0">
@@ -276,15 +275,13 @@ $get->dt_css();
                           ?>
                               <option <?php if ($row_roles['role'] == "ADMIN") {
                                         echo 'disabled';
-                                      }
-                                      if ($row_roles['role'] == $row['role']) {
-                                        echo 'selected';
                                       } ?>><?php echo $row_roles['role']; ?></option>
                           <?php
                             }
                           }
                           ?>
                         </select>
+
                       </div>
                       <div class="col-3 pb-3">
                         <label class="form-label">Status</label>

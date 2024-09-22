@@ -16,32 +16,39 @@ class Data_Operations extends dbconfig
   ############################################################################################################ 
   ##                                     Account creation                                                   ##
   ############################################################################################################
-  public function IR_new_USER()
-  {
-    global $db;
-    if (isset($_POST['btn_register'])) {
-      $name = $db->check($_POST['name']);
-      $phone = $db->check($_POST['phone']);
-      $role = $db->check($_POST['role']);
-      $username = $name;
-      $password = $phone;
+public function IR_new_USER()
+{
+  global $db;
+  if (isset($_POST['btn_register'])) {
+    // Sanitize input
+    $name = $db->check($_POST['name']);
+    $phone = $db->check($_POST['phone']);
+    $role = $db->check($_POST['role']);
+    $username = $name;  // You might want a different logic for username
+    $password = $phone;
 
-      $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-      $image = $_FILES['image']['name'];
-      $path = "assets/img/avatars/" . basename($_FILES['image']['name']);
-      move_uploaded_file($_FILES['image']['tmp_name'], $path);
+    // Handle image upload
+    $image = $_FILES['image']['name'];
+    $path = "assets/img/avatars/" . basename($_FILES['image']['name']);
+    move_uploaded_file($_FILES['image']['tmp_name'], $path);
 
-      if ($image == '') {
-        $image = "default.png";
-      }
-
-      $query = "INSERT INTO `tbl_accounts` (`id`, `date_time`, `name`, `username`, `password`, `address`, `phone`, `email`, `role`, `status`, `img_dir`, `link_facebook`, `link_twitter`, `link_instagram`, `link_tiktok`) VALUES (NULL, CURRENT_TIMESTAMP, '$name', '$username', '$hashed_password', '', '$phone', '', '$role', 'ACTIVE', '$image', '', '', '', '')";
-      $result = mysqli_query($db->connection, $query);
-
-      return $result;
+    // Use default image if no image is uploaded
+    if ($image == '') {
+      $image = "default.png";
     }
+
+    // Insert query without non-existent columns
+    $query = "INSERT INTO `tbl_accounts` (`id`, `date_time`, `name`, `username`, `password`, `address`, `phone`, `email`, `role`, `status`, `img_dir`) 
+              VALUES (NULL, CURRENT_TIMESTAMP, '$name', '$username', '$hashed_password', '', '$phone', '', '$role', 'ACTIVE', '$image')";
+    $result = mysqli_query($db->connection, $query);
+
+    return $result;
   }
+}
+
   #= Account creation end
   ############################################################################################################
   ############################################################################################################
@@ -375,7 +382,7 @@ class Data_Operations extends dbconfig
         move_uploaded_file($_FILES['image']['tmp_name'], $path);
       }
 
-      $query = "UPDATE `tbl_accounts` SET `name` = '$name', `address` = '$address', `phone` = '$phone', `email` = '$email', `role` = '$role', `status` = '$status', `img_dir` = '$image' WHERE `id`='$id'";
+      $query = "UPDATE `tbl_accounts` SET `name` = '$name', `username` = '$username', `address` = '$address', `phone` = '$phone', `email` = '$email', `role` = '$role', `status` = '$status', `img_dir` = '$image' WHERE `id`='$id'";
       $result = mysqli_query($db->connection, $query);
 
       return $result;

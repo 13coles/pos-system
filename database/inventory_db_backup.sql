@@ -46,8 +46,9 @@ CREATE TABLE `tbl_accounts` (
 --
 
 INSERT INTO `tbl_accounts` (`id`, `date_time`, `name`, `username`, `password`, `address`, `phone`, `email`, `role`, `status`, `img_dir`) VALUES
-(1, '2024-09-14 13:11:41', 'ADMIN', 'admin', '$2y$10$SiixH0RkHfGao32m4VN8TePXYFIaiefnmNM7Pwds6z.AFpNVHw63e', 'Brgy. Pusok, Cebu City, Cebu', '09123456789', 'admin@gmail.comm', 'ADMIN', 'ACTIVE', '3.png'),
-(12, '2024-09-02 19:06:37', 'Sample', 'Sample', '$2y$10$w/tBh7IHRpIgSfy9Q2jSfO8rKtDfCpz9GQM0B/yym0qErrWNMq9tW', '', '9326578124', '', 'CASHIER', 'ACTIVE', 'default.png');
+(1, '2024-09-22 14:11:13', ' ADMIN', 'Administrator', '$2y$10$wYrKBih/ucHlCpEtkwyJpehhMiM9Dn2ij3eLAkqoXKnmpBIYzwKEC', 'Brgy. Pusok, Cebu City, Cebu', '09123456789', 'admin@gmail.comm', 'ADMIN', 'ACTIVE', '3.png'),
+(14, '2024-09-22 13:14:05', 'Andrei-shop', 'Andrei-shop', '$2y$10$rnvNTKn8UHjTWs4mp0z41efNlSAcjRX0qXY6qOc91IF9aRf0RZNd2', '', '09357951246', '', 'ADMIN', 'ACTIVE', 'default.png'),
+(15, '2024-09-22 14:22:38', 'Sample', 'Sample', '$2y$10$.akqNjI9KbepitTWRpfu5OO1v3H.BB3OBt5Onc3CSOu2q3O2cvrx.', '', '09321456987', '', 'CASHIER', 'ACTIVE', 'default.png');
 
 -- --------------------------------------------------------
 

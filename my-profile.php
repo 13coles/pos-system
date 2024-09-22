@@ -36,121 +36,6 @@ $get->toastr_css_new();
   } 
   ?>
 
-  <div class="modal fade" id="modal_delete" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h6 class="modal-title"><i class="bx bx-unlink text-danger"></i> <strong>UNLINK ACCOUNT</strong></h6>
-          <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form class="needs-validation" method="POST" action="controller.php?action=unlink&ref=ADMIN" novalidate>
-          <div class="modal-body">
-            <h6>Are you sure to delete this linked account? <strong>This process <i>cannot</i> be undone</strong>.</h6>
-            <label for="facebook">Linked account: <span class="platform-text"></span></label>
-            <input type="text" class="form-control linked" id="facebook" placeholder="Enter link" required readonly>
-            <input type="hidden" class="platform" name="platform">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-dark" name="btn_unlink">Unlink</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modal_link_facebook" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <i class="bx bx-link text-primary"></i> <strong>LINK ACCOUNT</strong>
-          <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form class="needs-validation" method="POST" action="controller.php?action=link&ref=ADMIN&platform=FACEBOOK" novalidate>
-          <div class="modal-body contact_message form">
-            <h5>Link your facebook account.</h5>
-            <label for="#facebook" class="mb-2">Facebook link</label>
-            <input type="text" id="facebook" name="link" placeholder="Enter link" required>
-            <div class="invalid-feedback">*Enter a valid link</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-dark" name="btn_link">Link</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div><!-- End link Modal-->
-
-  <div class="modal fade" id="modal_link_twitter" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <i class="bx bx-link text-primary"></i> <strong>LINK ACCOUNT</strong>
-          <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form class="needs-validation" method="POST" action="controller.php?action=link&ref=ADMIN&platform=TWITTER" novalidate>
-          <div class="modal-body contact_message form">
-            <h5>Link your twitter account.</h5>
-            <label for="#twitter" class="mb-2">Twitter link</label>
-            <input type="text" id="twitter" name="link" placeholder="Enter link" required>
-            <div class="invalid-feedback">*Enter a valid link</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-dark" name="btn_link">Link</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div><!-- End link Modal-->
-
-  <div class="modal fade" id="modal_link_instagram" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <i class="bx bx-link text-primary"></i> <strong>LINK ACCOUNT</strong>
-          <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form class="needs-validation" method="POST" action="controller.php?action=link&ref=ADMIN&platform=INSTAGRAM" novalidate>
-          <div class="modal-body contact_message form">
-            <h5>Link your instagram account.</h5>
-            <label for="#instagram" class="mb-2">Instagram link</label>
-            <input type="text" id="instagram" name="link" placeholder="Enter link" required>
-            <div class="invalid-feedback">*Enter a valid link</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-dark" name="btn_link">Link</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div><!-- End link Modal-->
-
-  <div class="modal fade" id="modal_link_tiktok" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <i class="bx bx-link text-primary"></i> <strong>LINK ACCOUNT</strong>
-          <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form class="needs-validation" method="POST" action="controller.php?action=link&ref=ADMIN&platform=TIKTOK" novalidate>
-          <div class="modal-body contact_message form">
-            <h5>Link your tiktok account.</h5>
-            <label for="#tiktok" class="mb-2">Tiktok link</label>
-            <input type="text" id="tiktok" name="link" placeholder="Enter link" required>
-            <div class="invalid-feedback">*Enter a valid link</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-dark" name="btn_link">Link</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div><!-- End link Modal-->
-
   <div class="contact_area pt-3">
     <div class="container">
       <div class="row">
@@ -187,7 +72,7 @@ $get->toastr_css_new();
                 </div>
                 <div class="col-6 pb-3">
                   <label for="email" class="form-label">E-mail</label>
-                  <input type="text" id="email" name="email" value="<?php echo $admin_info['email']; ?>" placeholder="john.doe@example.com" />
+                  <input type="text" id="email" name="email" value="<?php echo $admin_info['email']; ?>" placeholder="james@example.com" />
                 </div>
                 <div class="col-6 pb-3">
                   <label for="phoneNumber" class="form-label">Phone Number</label>
@@ -199,7 +84,7 @@ $get->toastr_css_new();
                 </div>
                 <div class="col-3 pb-3">
                   <label class="form-label">Role</label>
-                  <input type="text" id="email" name="role" value="<?php echo $admin_info['role']; ?>" readonly placeholder="john.doe@example.com" />
+                  <input type="text" id="email" name="role" value="<?php echo $admin_info['role']; ?>" readonly placeholder="Enter ROle" />
                 </div>
                 <div class="col-3 pb-3">
                   <label class="form-label">Status</label>
@@ -212,7 +97,7 @@ $get->toastr_css_new();
                 </div>
                 <div class="col-6 pb-3">
                   <label for="username" class="form-label">Username</label>
-                  <input type="tel" id="username" name="username" maxlength="11" value="<?php echo $admin_info['username']; ?>" placeholder="09084524688" />
+                  <input type="text" id="username" name="username"  value="<?php echo $admin_info['username']; ?>" placeholder="Enter Uername" />
                 </div>
                 <div class="col-6 pb-3">
                   <label for="cur_password" class="form-label">Currrent password</label>
@@ -239,11 +124,6 @@ $get->toastr_css_new();
   <!--footer area start-->
   <?php include_once('util/footer-admin.php'); ?>
   <!--footer area end-->
-
-  <!--map js code here-->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdWLY_Y6FL7QGW5vcO3zajUEsrKfQPNzI"></script>
-  <script src="https://www.google.com/jsapi"></script>
-  <script src="assets/js/map.js"></script>
 
   <!-- Plugins JS -->
   <script src="assets/js/plugins.js"></script>

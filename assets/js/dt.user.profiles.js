@@ -165,9 +165,6 @@ $(function () {
       case "CASHIER":
         DR_tbl_accounts(id);
         break;
-      case "MECHANIC":
-        DR_tbl_accounts(id);
-        break;
       case role:
         DR_tbl_roles(id);
         break;
