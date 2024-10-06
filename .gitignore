@@ -1,0 +1,15 @@
+# Ignore the assets and config directories
+assets/
+database/
+plugins/
+
+# Ignore specific PHP files
+auth-forgot-password.php
+back-up.php
+controller.php
+error404.php
+config/file_controller.php
+config/password.controller.php
+config/validator.php
+config/dbconfig.php
+

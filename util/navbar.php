@@ -7,7 +7,7 @@
             <ul>
               <li class="top_links">
                 <span><i class="bx bx-bell pb-1"></i> <span class="badge bg-danger notif" style="position: absolute; top: -7px; left: 9px;"><?php echo $notification_ctr; ?></span></span>
-                <ul class="dropdown_links text-center" style="right: unset; left: 0; width: 23rem;">
+                <ul class="dropdown_links text-center"style="right: unset; left: 0; width: 23rem; max-height: 300px; overflow-y: auto; overflow-x: hidden;">
                   <span class="notif-body"></span>
                   <?php
                   $result_notif = $db->GR_notifications();
