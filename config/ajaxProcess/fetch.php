@@ -100,6 +100,41 @@ if (isset($_POST['action'])) {
     }
   }
 
+  if ($_POST['action'] == 'delete_sale') {
+    $transaction_id = mysqli_real_escape_string($conn, $_POST['transaction_id']);
+
+    // Start transaction
+    mysqli_begin_transaction($conn);
+
+    try {
+        // Step 1: Delete from tbl_transaction_ref where transaction_id matches
+        $query_del_transaction = "DELETE FROM `tbl_transaction_ref` WHERE `transaction_id` = '$transaction_id'";
+        $result_del_transaction = mysqli_query($conn, $query_del_transaction);
+
+        if (!$result_del_transaction) {
+            throw new Exception("Error deleting from tbl_transaction_ref");
+        }
+
+        // Step 2: Delete from tbl_sales where transaction_id matches
+        $query_del_sale = "DELETE FROM `tbl_sales` WHERE `transaction_id` = '$transaction_id'";
+        $result_del_sale = mysqli_query($conn, $query_del_sale);
+
+        if (!$result_del_sale) {
+            throw new Exception("Error deleting from tbl_sales");
+        }
+
+        // Commit the transaction if both deletions are successful
+        mysqli_commit($conn);
+
+        echo 'success';
+    } catch (Exception $e) {
+        // Rollback the transaction in case of error
+        mysqli_rollback($conn);
+        echo 'error';
+    }
+}
+
+
   #=DELETION PROCESSS END
 
   #insert record to table sales

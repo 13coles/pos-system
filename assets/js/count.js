@@ -1,4 +1,13 @@
 $(document).ready(function () {
+    // Function to format numbers (e.g., 1000 -> 1K, 1000000 -> 1M)
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M'; // For millions
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K'; // For thousands
+        }
+        return num; // For values less than 1000, return as is
+    }
     
     // Function to fetch the total number of brands
     function fetchBrandCount() {
@@ -41,8 +50,11 @@ $(document).ready(function () {
             data: { action: 'Count_total_sales' },
             dataType: 'json',
             success: function (response) {
-                // Update the total sales in the DOM
-                $('.total-sales').text(response.total_sales);
+                // Format the total sales value
+                const formattedSales = formatNumber(response.total_sales);
+    
+                // Update the total sales in the DOM with formatted value
+                $('.total-sales').text(formattedSales);
             },
             error: function () {
                 console.error('Error fetching total sales.');

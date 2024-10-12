@@ -35,16 +35,16 @@ $(function () {
         {
           render: function (data, type, row) {
             var btn = `<div class="dropdown">
-                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div class="dropdown-menu" style="">
-                        <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View transaction"><i class="bx bx-search"></i> View transaction</button>
-                      </div>
-                    </div>`;
-            return btn; 
-            //<a target="_blank" href="print-receipt.php?transaction_id=${row.transaction_id}&name=${row.customer}&date=${row.date_purchased}" class="dropdown-item" style="color: #000000" id="${row.transaction_id}" title="Generate receipt"><i class="bx bx-receipt"></i> Generate receipt</a>
-          },
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu" style="">
+                            <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View transaction"><i class="bx bx-search"></i> View transaction</button>
+                            <button type="button" class="dropdown-item btn-delete" id="${row.transaction_id}" title="Delete transaction"><i class="bx bx-trash"></i> Delete transaction</button>
+                          </div>
+                        </div>`;
+            return btn;
+        }        
         },
       ],
       footerCallback: function (row, data, start, end, display) {
@@ -154,6 +154,27 @@ $(function () {
       },
     });
   });
+
+  $(document).on("click", ".btn-delete", function () {
+    var transaction_id = $(this).attr("id");
+
+    if (confirm("Are you sure you want to delete this transaction?")) {
+        $.ajax({
+            url: 'config/ajaxProcess/fetch.php',
+            method: 'POST',
+            data: { action: 'delete_sale', transaction_id: transaction_id },
+            success: function (response) {
+                if (response == 'success') {
+                    alert('Transaction deleted successfully.');
+                    $("#table_sales").DataTable().ajax.reload(); 
+                } else {
+                    alert('Error deleting transaction.');
+                }
+            }
+        });
+    }
+});
+
 
   $("#btn_refresh").on("click", function () {
     $("#table_sales").DataTable().destroy();

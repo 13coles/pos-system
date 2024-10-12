@@ -7,42 +7,47 @@
             <ul>
               <li class="top_links">
                 <span><i class="bx bx-bell pb-1"></i> <span class="badge bg-danger notif" style="position: absolute; top: -7px; left: 9px;"><?php echo $notification_ctr; ?></span></span>
-                <ul class="dropdown_links text-center"style="right: unset; left: 0; width: 23rem; max-height: 300px; overflow-y: auto; overflow-x: hidden;">
-                  <span class="notif-body"></span>
-                  <?php
-                  $result_notif = $db->GR_notifications();
-                  if (mysqli_num_rows($result_notif) > 0) {
-                    while ($row_notif = mysqli_fetch_array($result_notif)) {
-                  ?>
-                      <li>
-                        <div class="alert alert-warning">
-                          <h6 class="alert-heading fw-bold mb-1 notif-title" style="letter-spacing: 1.5px;"><?php echo $row_notif['notif_name']; ?></h6>
-                          <p class="mb-0 notif-message"><?php echo $row_notif['notif_desc']; ?></p>
+                  <ul class="dropdown_links text-center" style="right: unset; left: 0; width: 23rem; max-height: 300px; overflow: hidden;">
+                    <!-- Wrapper for scrollable notifications -->
+                    <div class="notif-wrapper" style="overflow-y: auto; max-height: 250px;">
+                      <span class="notif-body"></span>
+                      <?php
+                      $result_notif = $db->GR_notifications();
+                      if (mysqli_num_rows($result_notif) > 0) {
+                        while ($row_notif = mysqli_fetch_array($result_notif)) {
+                      ?>
+                          <li>
+                            <div class="alert alert-warning">
+                              <h6 class="alert-heading fw-bold mb-1 notif-title" style="letter-spacing: 1.5px;"><?php echo $row_notif['notif_name']; ?></h6>
+                              <p class="mb-0 notif-message"><?php echo $row_notif['notif_desc']; ?></p>
+                            </div>
+                          </li>
+                      <?php
+                        }
+                      }
+                      ?>
+                      <li class="notif-none" style="border-bottom: none;" <?php if ($notification_ctr == 0) {
+                                                                          echo '';
+                                                                        } else {
+                                                                          echo 'hidden';
+                                                                        } ?>>
+                        <div class="alert alert-info">
+                          <p class="mb-0">No new notifications.</p>
                         </div>
                       </li>
-                  <?php
-                    }
-                  }
-                  ?>
-                  <li class="notif-none" style="border-bottom: none;" <?php if ($notification_ctr == 0) {
-                                                      echo '';
-                                                    } else {
-                                                      echo 'hidden';
-                                                    } ?>>
-                    <div class="alert alert-info">
-                      <p class="mb-0">No new notifications.</p>
-                    </div>
-                  </li>
-                  <li class="notif-btn" <?php if ($notification_ctr == 0) {
-                        echo 'hidden';
-                      } ?>>
-                    <a>
-                      <form method="POST" action="controller.php?action=clear_notification&ref=<?php echo $page; ?>" style="display: inline-flex">
-                        <button style="background: none; border: none; cursor: pointer" type="submit" name="logout">Clear notifications</button>
-                      </form>
-                    </a>
-                  </li>
-                </ul>
+                    </div> <!-- End of notif-wrapper -->
+
+                    <li class="notif-btn" <?php if ($notification_ctr == 0) {
+                                              echo 'hidden';
+                                            } ?>>
+                      <a>
+                        <form method="POST" action="controller.php?action=clear_notification&ref=<?php echo $page; ?>" style="display: inline-flex">
+                          <button style="background: none; border: none; cursor: pointer" type="submit" name="logout">Clear notifications</button>
+                        </form>
+                      </a>
+                    </li>
+                  </ul>
+
               </li>
               <li class="top_links p-0">
                 <img src="assets/img/avatars/<?php echo $admin_info['img_dir']; ?>" alt="system-logo" class="rounded" width="40" height="40">
