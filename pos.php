@@ -16,8 +16,6 @@ $system_info = mysqli_fetch_assoc($result_system);
 
 $notification_ctr = $db->GR_notif_ctr();
 
-$employee_ctr = $db->GR_employee_ctr();
-
 $product_ctr = $db->GR_product_ctr();
 
 $sales = $db->GR_sales();
@@ -31,7 +29,6 @@ $get->toastr_css_new();
 $get->dt_css();
 ?>
 <script type="text/javascript" src="assets/js/instascan.min.js"></script>
-
 <body>
   <?php
   if($role == 'ADMIN') {
@@ -90,17 +87,17 @@ $get->dt_css();
     <section class="home_product_area mb-50">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 text-center"> <!-- Center-align header -->
+          <div class="col-lg-12 text-center"> 
             <div class="product_header">
               <div class="section_title mt-5 d-flex align-items-center justify-content-center">
               <i class='bx bx-desktop me-2 '></i>
                 <h2>POINT OF SALE</h2>
               </div>
               <div class="product_tab_button mt-5">
-                <ul class="nav justify-content-center" role="tablist"> <!-- Center-align tab button -->
+                <ul class="nav justify-content-center" role="tablist"> 
                   <li>
                     <a class="active btn-modal-complete" data-bs-toggle="modal" data-bs-target="#modal_complete">
-                    <i class='bx bx-money mb-1' ></i> PAY NOW <!-- Dollar icon for the button -->
+                    <i class='bx bx-money mb-1' ></i> PAY NOW 
                     </a>
                   </li>
                 </ul>
@@ -125,20 +122,17 @@ $get->dt_css();
               <table class="table text-center" id="table_cart" width="100%">
                 <thead>
                   <tr>
-                    <th>QR code</th>
-                    <th>Image</th>
-                    <th>Product ID</th>
-                    <th>Brand</th>
-                    <th>Product</th>
+                    <th>Product Name</th>
                     <th>Price</th>
                     <th>Sub-total</th>
                     <th>Quantity</th>
                     <th>Action</th>
                   </tr>
                 </thead>
+
                 <tfoot>
                   <tr>
-                    <th colspan="6" class="card-footer text-end">TOTAL:</th>
+                    <th colspan="4" class="card-footer text-end">TOTAL:</th>
                     <th class="total_payment">₱0.00</th>
                   </tr>
                 </tfoot>

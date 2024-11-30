@@ -1,11 +1,5 @@
 <?php
-$servername = "localhost"; #server name
-$username = "root";        #database username
-$password = "";            #database password
-$dbname = "inventory_db";  #database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+include './config/conn.php';
 
 /// Query to fetch product data
 $sql = "SELECT product_name, product_qty FROM tbl_products";

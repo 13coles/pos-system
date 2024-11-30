@@ -60,9 +60,9 @@ $get->daterangepicker_css();
                   <th>Transaction ID</th>
                   <th>QR code</th>
                   <th>Image</th>
+                  <th>Product ID</th>
                   <th>Brand</th>
-                  <th>Name</th>
-                  <th>Description</th>
+                  <th>Product Name</th>
                   <th>Price</th>
                   <th>Subtotal</th>
                   <th>Quantity</th>
@@ -127,15 +127,13 @@ $get->daterangepicker_css();
                   <tr>
                     <th>Date purchased</th>
                     <th>Transaction ID</th>
-                    <th>Sold to</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th>Total Sales</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th colspan="3" class="card-footer" style="text-align:right">OVERALL SALES:</th>
+                    <th colspan="2" class="card-footer" style="text-align:right">OVERALL SALES:</th>
                     <th class="total_payment">₱0.00</th>
                   </tr>
                 </tfoot>

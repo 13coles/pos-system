@@ -234,27 +234,25 @@ $total = 0;
     text-align: right !important;
   }
 </style>
-
 <div class="receipt-content">
   <div class="container bootstrap snippets bootdey">
     <div class="row">
       <div class="col-12">
         <div class="invoice-wrapper">
-          <?php
-          include('util/header-print.php');
-          ?>
-            <div class="intro">
-              Hello <strong><?php echo htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8'); ?></strong>,
-              <br>
-              Thank you for shopping with us! Below is the receipt for your recent order.<br>
-              <i>*Please keep this receipt for your records and any future reference.</i>
-            </div>
+          <?php include('util/header-print.php'); ?>
 
+          <div class="intro">
+            Hello <strong><?php echo htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8'); ?></strong>,
+            <br>
+            Thank you for shopping with us! Below is the receipt for your recent order.
+            <br>
+            <i>*Please keep this receipt for your records and any future reference.</i>
+          </div>
 
           <div class="payment-info">
             <div class="row">
               <div class="col-6">
-                <span>Transcation #</span>
+                <span>Transaction #</span>
                 <strong class="transaction_id"><?php echo $transaction_id; ?></strong>
               </div>
               <div class="col-6 text-right">
@@ -267,48 +265,64 @@ $total = 0;
           <div class="line-items">
             <div class="headers clearfix">
               <div class="row">
-                <div class="col-5">Description</div>
-                <div class="col-4">Brand</div>
-                <div class="col-1">Quantity</div>
-                <div class="col-2 text-right">Amount</div>
+                <div class="col-3">Product Name</div>
+                <div class="col-2">Brand</div>
+                <div class="col-2">Original Price</div>
+                <div class="col-2">Discounted Price</div>
+                <div class="col-1 text-right">Quantity</div>
+                <div class="col-2 text-right">Total Amount</div>
               </div>
             </div>
+
             <div class="items">
               <?php
-              $result = $db->GR_cart_info();
+              // Fetch cart data with product details
+              $result = $db->GR_cart_info(); 
               if (mysqli_num_rows($result) > 0) {
+                $total = 0; // Initialize total amount
                 while ($row = mysqli_fetch_array($result)) {
-                  echo "
-                  <div class='row item'>
-                    <div class='col-5 desc'>
-                      " . $row['product_name'] . "
+                  // Fetch original and sale prices
+                  $original_price = number_format($row['original_price'], 2);
+                  $sale_price = !empty($row['sale_price']) && $row['sale_price'] > 0 
+                    ? number_format($row['sale_price'], 2) 
+                    : null;
+
+                  // Prepare price display: Show original price struck-through and sale price if available
+                  $price_display = $sale_price
+                    ? "<span style='text-decoration: line-through; color: gray;'>₱$original_price</span> 
+                       <span style='color: red; font-weight: bold;'>₱$sale_price</span>"
+                    : "<span>₱$original_price</span>";
+
+                  // Displaying cart details
+                    echo "
+                    <div class='row item'>
+                      <div class='col-3'>
+                        " . htmlspecialchars($row['product_name']) . "
+                      </div>
+                      <div class='col-2'>
+                        " . htmlspecialchars($row['product_brand']) . "
+                      </div>
+                      <div class='col-2'>
+                        ₱$original_price
+                      </div>
+                      <div class='col-2'>
+                        " . ($sale_price ? "<span style='color: red;'>₱$sale_price</span>" : "") . "
+                      </div>
+                      <div class='col-1 text-right'>
+                        " . htmlspecialchars($row['product_qty']) . "
+                      </div>
+                      <div class='col-2 text-right'>
+                        <span style='color: green;'>₱" . number_format($row['subtotal'], 2) . "</span>
+                      </div>
                     </div>
-                    <div class='col-4 desc'>
-                      " . $row['product_brand'] . "
-                    </div>
-                    <div class='col-1 qty'>
-                      " . $row['product_qty'] . "
-                    </div>
-                    <div class='col-2 amount text-right'>
-                      ₱" . number_format($row['subtotal'], 2) . "
-                    </div>
-                  </div>
-                  ";
-                  $total = $total + $row['subtotal'];
+                    ";
+
+                  $total += $row['subtotal']; // Calculate total
                 }
+              } else {
+                echo "<div class='row'><div class='col-12'>No items in the cart.</div></div>";
               }
               ?>
-            </div>
-            <div class="total text-right">
-              <div class="field">
-                Discount <span><?php echo $discount = 0; ?>%</span>
-              </div>
-              <div class="field">
-                VAT <span><?php echo $vat = 0; ?>%</span>
-              </div>
-              <div class="field grand-total">
-                Total <span><?php echo "₱" . number_format($total, 2); ?></span>
-              </div>
             </div>
 
             <div class="print">
@@ -317,10 +331,10 @@ $total = 0;
                 Print this receipt
               </a>
             </div>
-            
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+          </div> <!-- End of line-items -->
+        </div> <!-- End of invoice-wrapper -->
+      </div> <!-- End of col-12 -->
+    </div> <!-- End of row -->
+  </div> <!-- End of container -->
+</div> <!-- End of receipt-content -->

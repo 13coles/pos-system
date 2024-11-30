@@ -11,25 +11,24 @@ $(function () {
       dataSrc: "",
     },
     columns: [
-      { data: "date_posted" },
+      { data: "exp_date" },
       {
         render: function (data, type, row) {
           var img = `<a href="assets/img/products/${row.product_img}" target="_blank"><img src="assets/img/products/${row.product_img}" width="50" alt="image"></a>`;
           return img;
         },
       },
-      {
-        render: function (data, type, row) {
-          var qr = `<a href="assets/img/QR/${row.qr_code}" target="_blank"><img src="assets/img/QR/${row.qr_code}" width="50" alt="qr"></a>`;
-          return qr;
-        },
-      },
-      { data: "product_brand" },
       { data: "product_name" },
-      { data: "product_desc" },
-      {
+       {
         data: "product_price",
-        render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
+        render: function (data, type, row) {
+          if (row.in_sale && row.in_sale > 0) {
+            return `<span style="text-decoration: line-through; color: gray;">₱${parseFloat(row.product_price).toLocaleString()}</span> 
+                    <span style="color: red; font-weight: bold;">₱${parseFloat(row.in_sale).toLocaleString()}</span>`;
+          } else {
+            return `<span>₱${parseFloat(row.product_price).toLocaleString()}</span>`;
+          }
+        },
       },
       { data: "product_qty" },
       {
@@ -39,6 +38,9 @@ $(function () {
           switch (typeOf) {
             case "IN STOCK":
               status = `<div class="badge bg-success">IN STOCK</div>`;
+              break; 
+            case "LOW STOCK":
+              status = `<div class="badge bg-warning">LOW STOCK</div>`;
               break;
             case "OUT OF STOCK":
               status = `<div class="badge bg-danger">OUT OF STOCK</div>`;

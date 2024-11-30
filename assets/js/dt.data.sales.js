@@ -5,6 +5,7 @@ $(function () {
     $("#table_sales").DataTable({
       ordering: true,
       autoWidth: true,
+      destroy: true,
       order: [0, "desc"],
       ajax: {
         url: "config/ajaxProcess/fetch.php",
@@ -15,42 +16,30 @@ $(function () {
       columns: [
         { data: "date_purchased" },
         { data: "transaction_id" },
-        { data: "customer" },
         {
-          data: "total",
-          render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
+            data: "total",
+            render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
         },
         {
-          render: function (data, type, row) {
-            var typeOf = `${row.status}`;
-            var status = "";
-            switch (typeOf) {
-              case "COMPLETED":
-                status = `<div class="badge bg-success">COMPLETED</div>`;
-                break;
-            }
-            return status;
-          },
+            render: function (data, type, row) {
+                var btn = `<div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu" style="">
+                              <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View transaction"><i class="bx bx-search"></i> View transaction</button>
+                              <button type="button" class="dropdown-item btn-delete" id="${row.transaction_id}" title="Delete transaction"><i class="bx bx-trash"></i> Delete transaction</button>
+                            </div>
+                          </div>`;
+                return btn;
+            }        
         },
-        {
-          render: function (data, type, row) {
-            var btn = `<div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu" style="">
-                            <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View transaction"><i class="bx bx-search"></i> View transaction</button>
-                            <button type="button" class="dropdown-item btn-delete" id="${row.transaction_id}" title="Delete transaction"><i class="bx bx-trash"></i> Delete transaction</button>
-                          </div>
-                        </div>`;
-            return btn;
-        }        
-        },
-      ],
+    ],
+    
       footerCallback: function (row, data, start, end, display) {
         var api = this.api(),
           data;
-
+  
         var intVal = function (i) {
           return typeof i === "string"
             ? i.replace(/[\₱,]/g, "") * 1
@@ -58,20 +47,21 @@ $(function () {
             ? i
             : 0;
         };
-
+  
         pageTotal = api
-          .column(3, { page: "current" })
+          .column(2, { page: "current" })
           .data()
           .reduce(function (a, b) {
             return intVal(a) + intVal(b);
           }, 0);
-
-        $(api.column(3).footer()).html(
+  
+        $(api.column(2).footer()).html(
           $.fn.dataTable.render.number(",", ".", 2, "₱").display(pageTotal)
         );
       },
     });
   }
+  
 
   $(document).on("click", ".btn-view", function () {
     var transaction_id = $(this).attr("id");
@@ -185,6 +175,7 @@ $(function () {
     var to = $("#date_range_toSearch").val().substring(13);
     GR_tbl_sales_range(from, to);
   });
+
   function GR_tbl_sales_range(from, to) {
     $("#table_sales").DataTable().destroy();
     $("#table_sales").DataTable({
@@ -204,37 +195,26 @@ $(function () {
       columns: [
         { data: "date_purchased" },
         { data: "transaction_id" },
-        { data: "customer" },
         {
-          data: "total",
-          render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
+            data: "total",
+            render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
         },
         {
-          render: function (data, type, row) {
-            var typeOf = `${row.status}`;
-            var status = "";
-            switch (typeOf) {
-              case "COMPLETED":
-                status = `<div class="badge bg-success">COMPLETED</div>`;
-                break;
-            }
-            return status;
-          },
+            render: function (data, type, row) {
+                var btn = `<div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu" style="">
+                              <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View transaction"><i class="bx bx-search"></i> View transaction</button>
+                              <button type="button" class="dropdown-item btn-delete" id="${row.transaction_id}" title="Delete transaction"><i class="bx bx-trash"></i> Delete transaction</button>
+                            </div>
+                          </div>`;
+                return btn;
+            }        
         },
-        {
-          render: function (data, type, row) {
-            var btn = `<div class="dropdown">
-                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div class="dropdown-menu" style="">
-                        <button type="button" class="dropdown-item btn-view" id="${row.transaction_id}" data-bs-toggle="modal" data-bs-target="#modal_view" title="View"><i class="bx bx-search"></i> View</button>
-                      </div>
-                    </div>`;
-            return btn;
-          },
-        },
-      ],
+    ],
+    
       footerCallback: function (row, data, start, end, display) {
         var api = this.api(),
           data;
@@ -248,13 +228,13 @@ $(function () {
         };
 
         pageTotal = api
-          .column(3, { page: "current" })
+          .column(2, { page: "current" })
           .data()
           .reduce(function (a, b) {
             return intVal(a) + intVal(b);
           }, 0);
 
-        $(api.column(3).footer()).html(
+        $(api.column(2).footer()).html(
           $.fn.dataTable.render.number(",", ".", 2, "₱").display(pageTotal)
         );
       },

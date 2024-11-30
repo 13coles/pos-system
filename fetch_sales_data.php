@@ -1,16 +1,5 @@
 <?php
-$servername = "localhost"; #server name
-$username = "root";        #database username
-$password = "";            #database password
-$dbname = "inventory_db";  #database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include './config/conn.php';
 
 // Get the selected filter from the AJAX request
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'day'; // Default 

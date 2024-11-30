@@ -106,7 +106,7 @@ public function IR_new_USER()
           $product_id = 'PRODUCT_' . substr(str_shuffle($regex), 0, 12); # Generate random product ID
           $product_brand = $db->check($_POST['product_brand']);
           $product_name = $db->check($_POST['product_name']);
-          $product_desc = $db->check($_POST['product_desc']);
+          $exp_date = $db->check($_POST['exp_date']);
           $product_price = $db->check($_POST['product_price']);
           $product_qty = $db->check($_POST['product_qty']);
           $status = $product_qty == 0 ? 'OUT OF STOCK' : 'IN STOCK';
@@ -126,55 +126,134 @@ public function IR_new_USER()
           // Generate QR code with product id
           QRcode::png($product_id, $qr, 'H', 5, 5);
 
-          // Insert product details into the database
-          $query = "INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `product_desc`, `product_price`, `product_qty`, `status`, `qr_code`) 
-                    VALUES (NULL, CURRENT_TIMESTAMP, '$product_id', '$image', '$product_brand', '$product_name', '$product_desc', '$product_price', '$product_qty', '$status', '$qr_img')";
-          
+          // Insert product details into the tbl_products table
+          $query = "INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `exp_date`, `product_price`, `product_qty`, `status`, `qr_code`) 
+          VALUES (NULL, CURRENT_TIMESTAMP, '$product_id', '$image', '$product_brand', '$product_name', '$exp_date', '$product_price', '$product_qty', '$status', '$qr_img')";
           $result = mysqli_query($db->connection, $query);
 
-          return $result;
+          if ($result) {
+            // Insert product details into the in_stock table
+            $batch_number = 'BATCH_' . substr(str_shuffle($regex), 0, 8);  // Generate a random batch number
+            $in_stock_query = "INSERT INTO `in_stock` (`date_added`, `batch_number`, `product_name`, `quantity`) 
+                              VALUES (CURRENT_TIMESTAMP, '$batch_number', '$product_name', '$product_qty')";
+            $in_stock_result = mysqli_query($db->connection, $in_stock_query);
+            return $in_stock_result;  // Return result of inserting into in_stock table
+          } else {
+            return false;  // Return false if the product insert failed
+          }
       }
   }
-  public function UR_product($id)#Update record for a specific product
-  { 
+  public function UR_product($id) {
     global $db;
+  
     if (isset($_POST['btn_update_product'])) {
-      $product_brand = $db->check($_POST['product_brand']);
-      $product_name = $db->check($_POST['product_name']);
-      $product_desc = $db->check($_POST['product_desc']);
-      $product_price = $db->check($_POST['product_price']);
-      $product_qty = $db->check($_POST['product_qty']);
-      $filename = $db->check($_POST['filename_icon']);
-      $status = '';
+        $product_brand = $db->check($_POST['product_brand']);
+        $product_name = $db->check($_POST['product_name']);
+        $exp_date = $db->check($_POST['exp_date']);
+        $product_price = $db->check($_POST['product_price']);
+        $in_sale = $db->check($_POST['in_sale']);
+        $product_qty = $db->check($_POST['product_qty']);
+        $filename = $db->check($_POST['filename']); // using the hidden filename field
+        $status = '';
 
-      if ($product_qty == 0) {
-        $status = 'OUT OF STOCK';
-      } else {
-        $status = 'IN STOCK';
-      }
+        // Get the existing product quantity from the database
+        $existing_product_query = "SELECT `product_qty` FROM `tbl_products` WHERE `id` = '$id'";
+        $existing_product_result = mysqli_query($db->connection, $existing_product_query);
+        $existing_product = mysqli_fetch_assoc($existing_product_result);
+        $existing_qty = $existing_product['product_qty'];
 
-      if ($product_qty <= 10) {
-        $title = "PRODUCT LOW ON STOCKS!";
-        $message = "The product " . $product_name . ", has only (" . $product_qty . "pcs.) remaining.
-          Please restock soon.";
-        $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
-        mysqli_query($db->connection, $query_notif);
-      }
+        // Calculate the newly added quantity
+        $new_qty_added = $product_qty - $existing_qty;
 
-      $image = $_FILES['image']['name'];
-      $path = "assets/img/products/" . basename($_FILES['image']['name']);
-      move_uploaded_file($_FILES['image']['tmp_name'], $path);
+         // Calculate the difference in quantity
+         $qty_diff = $existing_qty - $product_qty; 
 
-      if ($image == '') {
-          $image = 'default.png';
-      }
+         // Handle out of stock scenario: Insert into out_stock if quantity decreased
+         if ($qty_diff > 0) {
+             $out_stock_query = "INSERT INTO `out_stock` (`product_name`, `quantity`, `status`, `date_sold`) 
+                                 VALUES ('$product_name', '$qty_diff', 'expired', CURRENT_TIMESTAMP)";
+             mysqli_query($db->connection, $out_stock_query);
+         }
 
-      $query = "UPDATE `tbl_products` SET `product_img`='$image', `product_brand`='$product_brand', `product_name`='$product_name', `product_desc`='$product_desc', `product_price`='$product_price', `product_qty`='$product_qty', `status`='$status' WHERE `id`='$id'";
-      $result = mysqli_query($db->connection, $query);
+        // Determine stock status based on quantity
+        if ($product_qty == 0) {
+            $status = 'OUT OF STOCK';
+        } elseif ($product_qty <= 10) {
+            $status = 'LOW STOCK';
+            
+            // Notification for low stock
+            $title = "PRODUCT LOW ON STOCKS!";
+            $message = "The product " . $product_name . ", has only (" . $product_qty . "pcs.) remaining.
+                Please restock soon.";
+            $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
+            mysqli_query($db->connection, $query_notif);
+        } else {
+            $status = 'IN STOCK';
+        }
 
-      return $result;
+        // Handle image upload (only if a new image is uploaded)
+        if ($_FILES['image']['name'] != '') {
+            $image = $_FILES['image']['name'];
+            $path = "assets/img/products/" . basename($_FILES['image']['name']);
+            move_uploaded_file($_FILES['image']['tmp_name'], $path);
+        } else {
+            // Keep the existing image if no new image is uploaded
+            $image = $filename; // filename comes from the hidden input field in the form
+        }
+
+        // Prepare the update query, only updating changed fields
+        $update_fields = [];
+        if ($product_name !== $existing_product['product_name']) {
+            $update_fields[] = "`product_name` = '$product_name'";
+        }
+        if ($product_price !== $existing_product['product_price']) {
+            $update_fields[] = "`product_price` = '$product_price'";
+        }
+        if ($in_sale !== $existing_product['in_sale']) {
+            $update_fields[] = "`in_sale` = '$in_sale'";
+        }
+        if ($product_qty !== $existing_product['product_qty']) {
+            $update_fields[] = "`product_qty` = '$product_qty'";
+        }
+        if ($image !== $existing_product['product_img']) {
+            $update_fields[] = "`product_img` = '$image'";
+        }
+        if ($product_brand !== $existing_product['product_brand']) {
+            $update_fields[] = "`product_brand` = '$product_brand'";
+        }
+        if ($exp_date !== $existing_product['exp_date']) {
+            $update_fields[] = "`exp_date` = '$exp_date'";
+        }
+        if ($status !== $existing_product['status']) {
+            $update_fields[] = "`status` = '$status'";
+        }
+
+        // Only update if there are fields to update
+        if (count($update_fields) > 0) {
+            $update_query = "UPDATE `tbl_products` SET " . implode(', ', $update_fields) . " WHERE `id` = '$id'";
+            $result = mysqli_query($db->connection, $update_query);
+
+            if ($result) {
+                // Insert the newly added quantity into the in_stock table
+                if ($new_qty_added > 0) {
+                    $batch_number = 'BATCH_' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'), 0, 8);  // Generate a random batch number
+                    $in_stock_query = "INSERT INTO `in_stock` (`date_added`, `batch_number`, `product_name`, `quantity`) 
+                                       VALUES (CURRENT_TIMESTAMP, '$batch_number', '$product_name', '$new_qty_added')";
+                    mysqli_query($db->connection, $in_stock_query);
+                }
+
+                return true;  // Return true if the product update was successful
+            } else {
+                return false;  // Return false if the product update failed
+            }
+        } else {
+            return true;  // Return true if no changes were made
+        }
     }
-  }
+}
+
+
+  
   ###################################################################################################################
   ##                                                                                                               ##
   ##                                          BRAND CRUD OPEARTION                                                 ##
@@ -678,13 +757,33 @@ public function IR_new_USER()
 
   ####################################################################  Cart  ###############################################################################
   public function GR_cart_info()
-  { #Get all records from cart to a specific user
-    global $db;
-    $query = "SELECT * FROM `tbl_cart`";
-    $result = mysqli_query($db->connection, $query);
-
-    return $result;
+  {
+      global $db;
+      // Update the query to join tbl_cart and tbl_products
+      $query = "
+          SELECT 
+              cart.id,
+              cart.product_name AS cart_product_name,
+              cart.product_brand AS cart_product_brand,
+              cart.product_price AS cart_product_price,
+              cart.subtotal,
+              cart.product_qty,
+              products.product_price AS original_price,
+              products.in_sale AS sale_price,
+              products.product_name AS product_name,
+              products.product_brand AS product_brand
+          FROM 
+              tbl_cart AS cart
+          JOIN 
+              tbl_products AS products 
+          ON 
+              cart.product_id = products.product_id;
+      ";
+      $result = mysqli_query($db->connection, $query);
+  
+      return $result;
   }
+  
 
   public function GR_cart_ctr()
   { #Get cart count
@@ -800,6 +899,7 @@ public function IR_new_USER()
       $msg = "";
     }
   }
+
 
   ########################################################################################################################################################################
   ##                                                                                                                                                                    ##

@@ -115,6 +115,11 @@
                               } else {
                                 echo '';
                               } ?>"><a href="sales.php">Sales</a></li>
+                  <li class="<?php if ($page == 'inventory') {
+                                echo 'active';
+                              } else {
+                                echo '';
+                              } ?>"><a href="inventory.php">Inventory</a></li>
                 </ul>
               </li>
               <li class="top_links <?php if ($page == 'user-profiles' || $page == 'settings' || $page == 'back-up') {

@@ -14,28 +14,37 @@ if (isset($_POST['action'])) {
   #insert product to cart
   if ($_POST['action'] == 'IR_cart') {
     $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
-    #search if the product id is "in stock"
+    
+    // Search if the product ID is "in stock"
     $query_search = "SELECT * FROM `tbl_products` WHERE `product_id`='$product_id' AND `status`='IN STOCK'";
     $result_search = mysqli_query($conn, $query_search);
     $row = mysqli_fetch_array($result_search);
-    #if product is "in stock", insert the following data
+    
+    // If product is "in stock", insert the following data
     $product_img = $row['product_img'];
     $qr_code = $row['qr_code'];
     $product_id = $row['product_id'];
     $product_name = $row['product_name'];
     $product_brand = $row['product_brand'];
-    $product_price = $row['product_price'];
+    
+    // Check if there's an "in_sale" price, otherwise use the original price
+    $product_price = !empty($row['in_sale']) && $row['in_sale'] > 0 ? $row['in_sale'] : $row['product_price'];
+    
     $product_qty = $row['product_qty'];
-    #query to insert product data to cart table
-    $query = "INSERT INTO `tbl_cart` (`id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`) VALUES (NULL, '$qr_code', '$product_img', '$product_id', '$product_name', '$product_brand', '$product_price', '$product_price', 1)";
+    
+    // Query to insert product data into cart table
+    $query = "INSERT INTO `tbl_cart` (`id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`) 
+              VALUES (NULL, '$qr_code', '$product_img', '$product_id', '$product_name', '$product_brand', '$product_price', '$product_price', 1)";
     $result = mysqli_query($conn, $query);
-    #cobdition if the insert query is true
+    
+    // Condition if the insert query is true
     if ($result) {
-      echo $return = $product_qty; #output the prodfuct quantity
+        echo $return = $product_qty;  // Output the product quantity
     } else {
-      echo $return = 'Product is out of stock!'; #if not throw this message
+        echo $return = 'Product is out of stock!';  // If not, throw this message
     }
-  }
+}
+
 
   #= DELETION PROCESS START HERE
   
@@ -137,63 +146,76 @@ if (isset($_POST['action'])) {
 
   #=DELETION PROCESSS END
 
-  #insert record to table sales
   if ($_POST['action'] == 'IR_tbl_sales') {
     $customer = mysqli_real_escape_string($conn, $_POST['customer']);
     $date = mysqli_real_escape_string($conn, $_POST['date']);
-    $regex = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'; #generate random string as transaction ID
     $transaction_id = mysqli_real_escape_string($conn, $_POST['transaction_id']);
     $status = "COMPLETED";
     $total_s = 0;
-    #insert record to tbale transaction
-    $query = "INSERT INTO `tbl_transaction_ref` (`id`, `date_purchased`, `transaction_id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`, `customer`, `status`) SELECT NULL, '$date', '$transaction_id', `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`, '$customer', '$status' FROM `tbl_cart`";
+
+    // Insert record into tbl_transaction_ref (transaction reference)
+    $query = "INSERT INTO `tbl_transaction_ref` (`id`, `date_purchased`, `transaction_id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`, `customer`, `status`) 
+              SELECT NULL, '$date', '$transaction_id', `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`, '$customer', '$status' 
+              FROM `tbl_cart`";
     $result = mysqli_query($conn, $query);
-    #query the transaction ID
+
+    // Query the transaction ID
     $query_transaction = "SELECT * FROM `tbl_transaction_ref` WHERE `transaction_id`='$transaction_id'";
     $result_transaction = mysqli_query($conn, $query_transaction);
-    #condition if table rows is less than zero
+
     if (mysqli_num_rows($result_transaction) > 0) {
-      #use while loop and do the computation product * quantity = total
-      while ($row = mysqli_fetch_array($result_transaction)) {
-        $product_id = $row['product_id'];
-        $qty = $row['product_qty'];
-        $total_s = $total_s + $row['subtotal'];
-        #query the product name and quantity from table products based on product ID
-        $query_qty = "SELECT `product_name`, `product_qty` FROM `tbl_products` WHERE `product_id`='$product_id'";
-        $result_qty = mysqli_query($conn, $query_qty);
-        $db_row = mysqli_fetch_array($result_qty);#fetch the result
-        $db_qty = $db_row['product_qty'];
-        $new_product_qty = $db_qty - $qty;#subract the quantity from database
-        #condition if quantity is less than or equal 11
-        if ($db_row['product_qty'] <= 11) {
-          $title = "PRODUCT LOW ON STOCKS!"; #set the title
-          $message = "The product " . $db_row['product_name'] . ", has only (" . $new_product_qty . "pcs.) remaining,
-          Please restock soon."; #set this message
-          #insert the ttle and message to notif table
-          $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
-          $result_notif = mysqli_query($conn, $query_notif);
+        while ($row = mysqli_fetch_array($result_transaction)) {
+            $product_id = $row['product_id'];
+            $qty = $row['product_qty'];
+            $total_s = $total_s + $row['subtotal'];
+
+            // Query product details based on product ID
+            $query_qty = "SELECT `product_name`, `product_qty` FROM `tbl_products` WHERE `product_id`='$product_id'";
+            $result_qty = mysqli_query($conn, $query_qty);
+            $db_row = mysqli_fetch_array($result_qty); // fetch the result
+            $db_qty = $db_row['product_qty'];
+            $new_product_qty = $db_qty - $qty; // Subtract the sold quantity
+
+            // Check if product stock is low (<= 11)
+            if ($new_product_qty <= 11) {
+                $title = "PRODUCT LOW ON STOCKS!";
+                $message = "The product " . $db_row['product_name'] . ", has only (" . $new_product_qty . "pcs.) remaining. Please restock soon.";
+                $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
+                $result_notif = mysqli_query($conn, $query_notif);
+            }
+
+            // Update the product quantity in tbl_products
+            $query4 = "UPDATE `tbl_products` SET `product_qty`='$new_product_qty' WHERE `product_id`='$product_id'";
+            $result4 = mysqli_query($conn, $query4);
+
+            // Insert record into out_stock table
+            $query_out_stock = "INSERT INTO `out_stock` (`product_name`, `quantity`, `date_sold`) 
+                                VALUES ('" . $db_row['product_name'] . "', '$qty', '$date')";
+            $result_out_stock = mysqli_query($conn, $query_out_stock);
         }
-        #after update the table products with the new quantity based on product ID
-        $query4 = "UPDATE `tbl_products` SET `product_qty`='$new_product_qty' WHERE `product_id`='$product_id'";
-        $result4 = mysqli_query($conn, $query4);
-      }
     }
-    #after the nested condition done , update the status"OUT OF STOCK" WHERE product_qty = " 0 "
+
+    // Update product status to "OUT OF STOCK" if quantity is zero
     $query_product_status = "UPDATE `tbl_products` SET `status`='OUT OF STOCK' WHERE `product_qty`='0'";
     $result_product_status = mysqli_query($conn, $query_product_status);
-    #then now insert the record to sales table
-    $query_sale = "INSERT INTO `tbl_sales` (`id`, `date_purchased`, `transaction_id`, `customer`, `total`, `status`) VALUES (NULL, '$date', '$transaction_id', '$customer', '$total_s', '$status');";
+
+    // Insert the sale record into tbl_sales
+    $query_sale = "INSERT INTO `tbl_sales` (`id`, `date_purchased`, `transaction_id`, `customer`, `total`, `status`) 
+                   VALUES (NULL, '$date', '$transaction_id', '$customer', '$total_s', '$status')";
     $result_sale = mysqli_query($conn, $query_sale);
-    #then delete records from the cart
+
+    // Delete records from the cart after sale
     $query_DEL = "DELETE FROM `tbl_cart`";
     $result_DEL = mysqli_query($conn, $query_DEL);
-    #condtion befor end of process
+
+    // Condition before ending process
     if ($result_sale) {
-      echo $return = "$transaction_id has completed successfully!"; #throw this message if transaction is done
+        echo $return = "$transaction_id has completed successfully!"; // Success message
     } else {
-      echo $return = 'An error has occured during the transaction!'; #throw this is something happened
+        echo $return = 'An error has occurred during the transaction!'; // Error message
     }
-  }
+}
+
 
   #=UPDATE RECORDS HERE
 
@@ -365,16 +387,18 @@ if (isset($_GET['action'])) {
 
 
   if ($_GET['action'] == 'GR_tbl_cart') {
-    $query = "SELECT * FROM `tbl_cart`";
+    $query = "SELECT id, product_id, product_name, product_price, subtotal, product_qty FROM tbl_cart LIMIT 25";
     $result = mysqli_query($conn, $query);
+
     $array = [];
-    if (mysqli_num_rows($result) > 0) {
-      foreach ($result as $row) {
-        array_push($array, $row);
-      }
+    if ($result && mysqli_num_rows($result) > 0) {
+        $array = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
     echo json_encode($array);
-  }
+}
+
+
+
 
   if ($_GET['action'] == 'GR_tbl_accounts') {
     $role = mysqli_real_escape_string($conn, $_GET['role']);
@@ -400,22 +424,31 @@ if (isset($_GET['action'])) {
 
   #sales.js response script
   if ($_GET['action'] == 'GR_tbl_sales') {
-    $query = "SELECT * FROM `tbl_sales`";
+    $query = "SELECT id, date_purchased, transaction_id, total FROM `tbl_sales`";
     $result = mysqli_query($conn, $query);
+    
+    if ($result === false) {
+        echo json_encode(['error' => 'Query failed']);
+        exit();
+    }
+
     $array = [];
     if (mysqli_num_rows($result) > 0) {
-      foreach ($result as $row) {
-        array_push($array, $row);
-      }
+        foreach ($result as $row) {
+            array_push($array, $row);
+        }
+        echo json_encode($array);
+    } else {
+        echo json_encode([]);
     }
-    echo json_encode($array);
-  }
+}
+
 
   if ($_GET['action'] == 'GR_tbl_sales_range') {
     $from = mysqli_real_escape_string($conn, $_GET['from']);
     $to = mysqli_real_escape_string($conn, $_GET['to']);
 
-    $query = "SELECT * FROM `tbl_sales` WHERE `date_purchased`>'$from' AND `date_purchased`<'$to'";
+    $query = "SELECT id, date_purchased, transaction_id, total FROM `tbl_sales` WHERE `date_purchased`>'$from' AND `date_purchased`<'$to'";
     $result = mysqli_query($conn, $query);
     $array = [];
     if (mysqli_num_rows($result) > 0) {

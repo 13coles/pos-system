@@ -38,14 +38,11 @@ $get->dt_css();
         <table class="table text-center" id="table_products" width="100%" style="font-size: 12px; table-layout: fixed;">
             <thead>
                 <tr>
-                    <th>Last update</th>
+                    <th>Date Expiration</th>
                     <th>Image</th>
-                    <th>QR code</th>
-                    <th>Brand</th>
-                    <th>Product</th>
-                    <th>Description</th>
+                    <th>Product Name</th>
                     <th>Price</th>
-                    <th>Stock</th>
+                    <th>Available Quantity</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -54,7 +51,7 @@ $get->dt_css();
               <?php if($products): ?>
                   <?php foreach($products as $product): ?>
                       <tr>
-                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['date_posted']); ?></td>
+                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['exp_date']); ?></td>
                           <td style="text-align: center; vertical-align: middle;" class="img-fluid">
                               <?php
                               // Display the product image
@@ -65,27 +62,25 @@ $get->dt_css();
                               }
                               ?>
                           </td>
-                          <td style="text-align: center; vertical-align: middle;" class="img-fluid">
-                              <?php
-                              // Display the QR code
-                              if (!empty($product['qr_code'])) {
-                                  echo '<img src="assets/img/QR/' . htmlspecialchars($product['qr_code']) . '" alt="QR Code" style="width: 100px; height: 100px;">';
+                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_name']); ?></td>
+                          <td style="text-align: center; vertical-align: middle; font-size:12px;">
+                              <?php 
+                              // Check if the product is on sale and render the price accordingly
+                              if (isset($product['in_sale']) && $product['in_sale'] > 0) {
+                                  echo '<span style="text-decoration: line-through; color: gray;">₱' . number_format($product['product_price'], 2) . '</span>';
+                                  echo ' <span style="color: red; font-weight: bold;">₱' . number_format($product['in_sale'], 2) . '</span>';
                               } else {
-                                  echo 'No QR code available';
+                                  echo '₱' . number_format($product['product_price'], 2);
                               }
                               ?>
                           </td>
-                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_brand']); ?></td>
-                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_name']); ?></td>
-                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_desc']); ?></td>
-                          <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_price']); ?></td>
                           <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['product_qty']); ?></td>
                           <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($product['status']); ?></td>
                       </tr>
                   <?php endforeach; ?>
               <?php else: ?>
                   <tr>
-                      <td colspan="9" class="text-center-middle">No products found.</td>
+                      <td colspan="6" class="text-center-middle">No products found.</td>
                   </tr>
               <?php endif; ?>
           </tbody>

@@ -44,6 +44,7 @@ $(function () {
     $("#table_cart").DataTable({
       ordering: false,
       autoWidth: true,
+      destroy: true,
       ajax: {
         url: "config/ajaxProcess/fetch.php",
         method: "GET",
@@ -51,24 +52,17 @@ $(function () {
         dataSrc: "",
       },
       columns: [
-        {
-          render: function (data, type, row) {
-            var qr = `<a href="assets/img/QR/${row.qr_code}" target="_blank"><img src="assets/img/QR/${row.qr_code}" width="50" alt="qr"></a>`;
-            return qr;
-          },
-        },
-        {
-          render: function (data, type, row) {
-            var img = `<a href="assets/img/products/${row.product_img}" target="_blank"><img src="assets/img/products/${row.product_img}" width="50" alt="image"></a>`;
-            return img;
-          },
-        },
-        { data: "product_id" },
-        { data: "product_brand" },
         { data: "product_name" },
         {
           data: "product_price",
-          render: $.fn.dataTable.render.number(",", ".", 2, "₱"),
+          render: function (data, type, row) {
+            if (row.in_sale && row.in_sale > 0) {
+              return `<span style="text-decoration: line-through; color: gray;">₱${parseFloat(row.product_price).toLocaleString()}</span> 
+                      <span style="color: red; font-weight: bold;">₱${parseFloat(row.in_sale).toLocaleString()}</span>`;
+            } else {
+              return `<span>₱${parseFloat(row.product_price).toLocaleString()}</span>`;
+            }
+          },
         },
         {
           data: "subtotal",
@@ -88,9 +82,9 @@ $(function () {
         },
       ],
       footerCallback: function (row, data, start, end, display) {
-        var api = this.api(),
-          data;
-
+        var api = this.api();
+  
+        // Helper function to parse and sum numeric values
         var intVal = function (i) {
           return typeof i === "string"
             ? i.replace(/[\₱,]/g, "") * 1
@@ -99,14 +93,16 @@ $(function () {
             : 0;
         };
 
-        pageTotal = api
-          .column(6, { page: "current" })
-          .data()
-          .reduce(function (a, b) {
-            return intVal(a) + intVal(b);
-          }, 0);
+        // Total for the current page
+        var pageTotal = api
+        .column(2, { page: "current" }) // Use the correct column index for subtotal
+        .data()
+        .reduce(function (a, b) {
+          return intVal(a) + intVal(b);
+        }, 0);
 
-        $(api.column(6).footer()).html(
+         // Update the footer with the total
+        $(api.column(2).footer()).html(
           $.fn.dataTable.render.number(",", ".", 2, "₱").display(pageTotal)
         );
       },

@@ -125,10 +125,10 @@ $get->dt_css();
                 </div>
 
                 <div class="row mb-3">
-                  <label class="col-md-4 col-lg-3 col-form-label">Product Description</label>
+                  <label class="col-md-4 col-lg-3 col-form-label">Expiration Date</label>
                   <div class="col-md-8 col-lg-9">
-                    <textarea name="product_desc" class="form-control" maxlength="255" style="height: 100px" placeholder="Enter description (max 255 characters)"><?php echo $row_info['product_desc']; ?>
-                </textarea>
+                    <input name="exp_date" type="date" class="form-control" value="<?php echo $row_info['exp_date']; ?>" required>
+                    <div class="invalid-feedback">Please add a valid expiration date.</div>
                   </div>
                 </div>
 
@@ -138,6 +138,13 @@ $get->dt_css();
                     <input name="product_price" type="text" class="form-control" value="<?php echo $row_info['product_price']; ?>" placeholder="Enter price">
                     <div class="invalid-feedback">Please add product price.</div>
                   </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">Sale Price</label>
+                    <div class="col-md-8 col-lg-9">
+                        <input name="in_sale" type="text" class="form-control" placeholder="Enter sale price" value="<?php echo $row_info['in_sale']; ?>">
+                    </div>
                 </div>
 
                 <div class="row mb-3">
@@ -216,17 +223,18 @@ $get->dt_css();
                 </select>
               </div>
             </div>
-            <div class="row mb-3">
-              <label class="col-md-4 col-lg-3 col-form-label">Product Description</label>
-              <div class="col-md-8 col-lg-9">
-                <textarea name="product_desc" class="form-control" maxlength="255" style="height: 100px" placeholder="Enter description (max 255 characters)"></textarea>
-              </div>
-            </div>
            <div class="row mb-3">
               <label class="col-md-4 col-lg-3 col-form-label">Price</label>
               <div class="col-md-8 col-lg-9">
                 <input name="product_price" type="number" class="form-control" placeholder="Enter price" min="0" step="0.01" required oninput="validatePrice(this)">
                 <div class="invalid-feedback">Please add a valid product price (positive number).</div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-md-4 col-lg-3 col-form-label">Expiration Date</label>
+              <div class="col-md-8 col-lg-9">
+                <input name="exp_date" type="date" class="form-control" required>
+                <div class="invalid-feedback">Please add a valid expiration date.</div>
               </div>
             </div>
             <div class="row mb-3">
@@ -276,14 +284,11 @@ $get->dt_css();
               <table class="table text-center" id="table_products" width="100%">
                 <thead>
                   <tr>
-                    <th>Last update</th>
+                    <th>Date Expiration</th>
                     <th>Image</th>
-                    <th>QR code</th>
-                    <th>Brand</th>
-                    <th>Product</th>
-                    <th>Description</th>
+                    <th>Product Name</th>
                     <th>Price</th>
-                    <th>Stock</th>
+                    <th>Available Quantity</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
