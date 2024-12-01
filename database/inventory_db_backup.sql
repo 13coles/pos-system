@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2024 at 10:41 AM
+-- Generation Time: Dec 01, 2024 at 05:19 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,61 @@ SET time_zone = "+00:00";
 --
 -- Database: `inventory_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `in_stock`
+--
+
+CREATE TABLE `in_stock` (
+  `id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `batch_number` varchar(50) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `in_stock`
+--
+
+INSERT INTO `in_stock` (`id`, `date_added`, `batch_number`, `product_name`, `quantity`) VALUES
+(7, '2024-11-29 17:43:34', 'BATCH_0tJ6kHim', 'Vitruvi ', 100),
+(8, '2024-11-29 17:43:58', 'BATCH_6zhTIiO8', 'Vitruvi ', 100),
+(9, '2024-11-29 17:44:51', 'BATCH_DiY7cE3J', ' Glow Serum', 300),
+(10, '2024-11-29 20:38:40', 'BATCH_MAuPSN61', ' Glow Serum', 110),
+(11, '2024-11-29 20:40:20', 'BATCH_gqzbIwPt', 'Vitruvi ', 310),
+(12, '2024-11-29 20:46:28', 'BATCH_c26QUuY4', ' Glow Serum', 100),
+(13, '2024-11-30 17:18:57', 'BATCH_eFgGZoAw', ' Glow Serum', 505),
+(14, '2024-11-30 23:57:50', 'BATCH_pszvuVPY', ' Glow Serum', 100);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `out_stock`
+--
+
+CREATE TABLE `out_stock` (
+  `id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date_sold` datetime NOT NULL,
+  `status` enum('sold','expired') DEFAULT 'sold'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `out_stock`
+--
+
+INSERT INTO `out_stock` (`id`, `product_name`, `quantity`, `date_sold`, `status`) VALUES
+(2, 'Vitruvi ', 10, '2024-11-29 05:46:26', 'sold'),
+(3, ' Glow Serum', 10, '2024-11-29 05:46:26', 'sold'),
+(4, ' Glow Serum', 2, '2024-11-30 12:40:04', 'sold'),
+(5, ' Glow Serum', 3, '2024-11-30 01:44:42', 'sold'),
+(8, ' Glow Serum', 100, '2024-11-30 23:22:34', 'expired'),
+(9, ' Glow Serum', 990, '2024-12-02 12:07:48', 'sold'),
+(10, ' Glow Serum', 1, '2024-12-02 00:15:53', 'expired');
 
 -- --------------------------------------------------------
 
@@ -67,36 +122,13 @@ CREATE TABLE `tbl_brands` (
 --
 
 INSERT INTO `tbl_brands` (`id`, `brand`, `img_dir`) VALUES
-(26, 'Happy Noz Onion Stickers', '2024090512285232.jpg'),
-(27, 'Brilliant Skin', '2024090513255662.jpg'),
-(28, 'NRB', '2024090512303380.jpg'),
-(29, 'Beauche Skin Care', '2024090512323801.jpg'),
-(30, 'Rosmar Kagayaku', '2024090512334049.jpg'),
-(31, 'Sevendays', '2024090512372278.jpg'),
-(33, 'Sereese Beauty', '2024090512410891.jpg'),
-(34, 'Goree', '2024090512433551.jpg'),
-(37, 'COCOBERRY', '2024090512471846.jpg'),
-(38, 'Glowrie', '2024090512495658.jpg'),
-(39, 'A Bonne', '2024090512521718.jpg'),
-(40, 'Beauty Wise', '2024090512544117.jpg'),
-(41, 'Skin Reborn', '2024090512560018.jpg'),
-(42, 'Dr. Alvin', '2024090512582743.jpg'),
-(43, 'BS Essentials', '2024090513372373.jpg'),
-(44, 'DW Staying Beautiful', '2024090513423831.jpg'),
-(46, 'Sace Lady', '2024090513522721.jpg'),
-(48, 'Skin Sensation', '2024090514151057.jpg'),
-(49, 'Honest Glow', '2024090514175554.jpg'),
-(50, 'So Beauty Soriko', '2024090514380279.jpg'),
-(51, 'Luxe Skin', '2024090514391278.jpg'),
-(52, 'SkeenCare', '2024090514401647.jpg'),
-(53, 'Aishi Tokyo', '2024090514420827.jpg'),
-(54, 'Gluta Frozen', '2024090514424517.jpg'),
-(55, 'Kat Melendez', '2024090514432736.jpg'),
-(56, 'ISHIN', '2024090514440229.jpg'),
-(57, 'FDA', '2024090514484779.jpg'),
-(58, 'LI-SHOU', '2024090514504457.jpg'),
-(59, 'Gluta Lipo', '2024090514512381.jpg'),
-(60, 'Ashley Shine', '2024090515093643.jpg');
+(15, 'Wardiere Beauty', '1.png'),
+(16, 'Radiance Glow', '2.png'),
+(17, 'Beauty Cosmetics', '4.png'),
+(18, 'Purely PH', '3.png'),
+(19, 'Bella Skin', '5.png'),
+(22, 'Borcel SKin Care', '7.png'),
+(23, 'Luminous Beauty', '8.png');
 
 -- --------------------------------------------------------
 
@@ -128,6 +160,14 @@ CREATE TABLE `tbl_notification` (
   `notif_desc` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `tbl_notification`
+--
+
+INSERT INTO `tbl_notification` (`id`, `notif_name`, `notif_desc`) VALUES
+(55, 'PRODUCT LOW ON STOCKS!', 'The product  Glow Serum, has only (10pcs.) remaining. Please restock soon.'),
+(56, 'PRODUCT LOW ON STOCKS!', 'The product  Glow Serum, has only (9pcs.) remaining.\r\n                Please restock soon.');
+
 -- --------------------------------------------------------
 
 --
@@ -141,8 +181,9 @@ CREATE TABLE `tbl_products` (
   `product_img` varchar(255) NOT NULL,
   `product_brand` varchar(30) NOT NULL,
   `product_name` varchar(50) NOT NULL,
-  `product_desc` varchar(255) NOT NULL,
+  `exp_date` date NOT NULL,
   `product_price` float NOT NULL,
+  `in_sale` decimal(10,2) DEFAULT NULL,
   `product_qty` int(255) NOT NULL,
   `status` varchar(20) NOT NULL,
   `qr_code` varchar(255) NOT NULL
@@ -152,29 +193,9 @@ CREATE TABLE `tbl_products` (
 -- Dumping data for table `tbl_products`
 --
 
-INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `product_desc`, `product_price`, `product_qty`, `status`, `qr_code`) VALUES
-(133, '2024-09-24 07:56:43', 'PRODUCT_I4Nj92X3gAUM', 'default.png', 'Happy Noz Onion Stickers', 'Organic Onion Sticker', 'free nose freshener                ', 350, 1, 'IN STOCK', 'Organic Onion Sticker.png'),
-(134, '2024-09-24 07:55:51', 'PRODUCT_waA8yrs64jFo', 'default.png', 'NRB', 'Whitening Deo Cream', 'Effectiveness of an antiperspirant                ', 190, 1, 'IN STOCK', 'Whitening Deo Cream.png'),
-(135, '2024-09-24 07:55:26', 'PRODUCT_65eqoSNQy2KB', 'default.png', 'Beauche Skin Care', 'Beauty Soap', 'Cleanse your skin and eliminate pimple                ', 299, 1, 'IN STOCK', 'Beauty Soap.png'),
-(136, '2024-09-25 17:28:49', 'PRODUCT_oe9VqsIX72T4', 'default.png', 'Rosmar Kagayaku', 'Bleaching whipped soap', 'Scars remover                ', 32, 5, 'IN STOCK', 'Bleaching whipped soap.png'),
-(137, '2024-09-22 17:14:46', 'PRODUCT_JZWx6lUYEuBm', '2024090515144343.jpg', 'Ashley Shine', 'Hair Serum', 'Breakage for a strong and shiny hair', 150, 1, 'IN STOCK', 'Hair Serum.png'),
-(138, '2024-09-22 17:17:19', 'PRODUCT_8E2XTPg9nl0s', '2024090515093643.jpg', 'Ashley Shine', 'Niacinamide Pure Serum', 'Quickly penetrate the skin', 350, 1, 'IN STOCK', 'Niacinamide Pure Serum.png'),
-(139, '2024-09-25 17:28:27', 'PRODUCT_kw0KWjVSUnRO', 'default.png', 'Gluta Lipo', 'lemon juice drink', 'Remove body toxins                 ', 280, 5, 'IN STOCK', 'lemon juice drink.png'),
-(140, '2024-09-25 17:23:07', 'PRODUCT_5dWrQG0EtNxU', 'default.png', 'LI-SHOU', 'Slimming Coffee', 'Reducing inflammation                 ', 349.96, 1, 'IN STOCK', 'Slimming Coffee.png'),
-(141, '2024-09-22 17:25:21', 'PRODUCT_pPaQ1l3q4zxv', '2024090514484779.jpg', 'FDA', 'Feminine Wash', 'Reduce visible wrinkles', 150, 1, 'IN STOCK', 'Feminine Wash.png'),
-(142, '2024-09-24 07:56:28', 'PRODUCT_WDSphiNwJj6a', 'default.png', 'Glowrie', 'Whitening Body Lotion', 'Enriched with snail extract                ', 280, 1, 'IN STOCK', 'Whitening Body Lotion.png'),
-(143, '2024-09-25 17:15:18', 'PRODUCT_diHvQgxB0e1N', 'default.png', 'Glowrie', 'Serum Lotion', 'Protects and whitens without hurting your pocket                ', 185, 4, 'IN STOCK', 'Serum Lotion.png'),
-(144, '2024-09-22 17:31:34', 'PRODUCT_isp0ktPTWRnD', '2024090514463292.jpg', 'COCOBERRY', 'Serum Gel Lotion', 'Moisturizes and Smoothens skin', 298, 1, 'IN STOCK', 'Serum Gel Lotion.png'),
-(145, '2024-09-22 17:33:26', 'PRODUCT_OuCNRElHfTpA', '2024090514455517.jpg', 'Kat Melendez', 'Nikocee', 'Anti-aging', 250, 1, 'IN STOCK', 'Nikocee.png'),
-(146, '2024-09-22 17:37:21', 'PRODUCT_t4wy5dnmvaKD', '2024090514451255.jpg', 'Beauty Wise', ' Capsule Glutathione ', 'Promote a youthful appearance', 349, 1, 'IN STOCK', ' Capsule Glutathione .png'),
-(147, '2024-09-22 17:38:59', 'PRODUCT_ByGguVlAjWtP', '2024090514440229.jpg', 'ISHIN', 'Food Supplement', 'Help protect skin cells', 350, 1, 'IN STOCK', 'Food Supplement.png'),
-(148, '2024-09-22 17:40:30', 'PRODUCT_dtQ2gUoLDNBi', '2024090514432736.jpg', 'Kat Melendez', 'Nekothione', 'Moisture boost in every pill', 599, 1, 'IN STOCK', 'Nekothione.png'),
-(149, '2024-09-23 15:39:23', 'PRODUCT_q7HXyB4jULM6', '2024090514424517.jpg', 'Freshies Collagen', 'Frozen Collagen Capsule', 'Gives nutrients to the skin', 349, 1, 'IN STOCK', 'Frozen Collagen Capsule.png'),
-(150, '2024-09-23 15:42:50', 'PRODUCT_XG0qczi3DbO5', '2024090514420827.jpg', 'Aishi Tokyo', 'Glutathione', 'Promote intense lightening without harming the skin', 570, 1, 'IN STOCK', 'Glutathione.png'),
-(151, '2024-09-25 17:14:35', 'PRODUCT_Q3b0MOeV8Iqs', 'default.png', 'Sevendays', 'Power soap', 'Improve dark spot                ', 40, 6, 'IN STOCK', 'Power soap.png'),
-(152, '2024-09-25 17:14:10', 'PRODUCT_ERmcXBVNlaeH', 'default.png', 'COCOBERRY', 'Body soap', 'A Premium soap                ', 50, 5, 'IN STOCK', 'Body soap.png'),
-(153, '2024-09-25 17:27:40', 'PRODUCT_gnVjI9e3C4TM', 'default.png', 'Rosmar Kagayaku', 'Body soap', 'Lighten your skin                                ', 50, 5, 'IN STOCK', 'Body soap.png'),
-(154, '2024-09-25 17:13:45', 'PRODUCT_C634UqJsEHgK', 'default.png', 'A Bonne', 'A Bonne Spa MILK Salt', 'Provide Nourishment                ', 130, 2, 'IN STOCK', 'A Bonne Spa MILK Salt.png');
+INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `exp_date`, `product_price`, `in_sale`, `product_qty`, `status`, `qr_code`) VALUES
+(138, '2024-11-29 12:41:01', 'PRODUCT_bzrtGEOs2nXR', 'default.png', 'Wardiere Beauty', 'Vitruvi ', '2028-11-29', 60, 35.00, 500, 'IN STOCK', 'Vitruvi .png'),
+(139, '2024-12-01 16:15:53', 'PRODUCT_PGDL5oRK0zyr', 'default.png', 'Bella Skin', ' Glow Serum', '2030-12-29', 500, 280.00, 9, 'LOW STOCK', 'Radiant Glow Serum.png');
 
 -- --------------------------------------------------------
 
@@ -215,11 +236,10 @@ CREATE TABLE `tbl_sales` (
 --
 
 INSERT INTO `tbl_sales` (`id`, `date_purchased`, `transaction_id`, `customer`, `total`, `status`) VALUES
-(2, '2024/09/24 03:31:13', 'RZ5rqF8zmCQUkBA', 'novemae', 839, 'COMPLETED'),
-(3, '2024/09/24 03:33:40', 'dMelg83ByuzsAvj', 'mikha', 280, 'COMPLETED'),
-(4, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', 'joana', 560, 'COMPLETED'),
-(5, '2024/09/26 01:22:45', 'R6GoMvVCBJXx9dQ', 'colet', 749.92, 'COMPLETED');
-
+(7, '2024/11/29 05:46:26', 'KS2lE5XwxJ7p1D9', 'Vi', 2500, 'COMPLETED'),
+(8, '2024/11/30 12:40:04', 'KJFdqkiNQphrnf1', 'test', 560, 'COMPLETED'),
+(9, '2024/11/30 01:44:42', 'oFA3mEGX9Nxuk2f', 'Gian', 840, 'COMPLETED'),
+(10, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'm', 277200, 'COMPLETED');
 
 -- --------------------------------------------------------
 
@@ -273,23 +293,27 @@ CREATE TABLE `tbl_transaction_ref` (
 --
 
 INSERT INTO `tbl_transaction_ref` (`id`, `date_purchased`, `transaction_id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`, `customer`, `status`) VALUES
-(35, '2024/09/24 03:31:13', 'RZ5rqF8zmCQUkBA', 'Beauty Soap.png', '2024090512323801.jpg', 'PRODUCT_65eqoSNQy2KB', 'Beauty Soap', 'Beauche Skin Care', 299, 299, 1, 'novemae', 'COMPLETED'),
-(36, '2024/09/24 03:31:13', 'RZ5rqF8zmCQUkBA', 'Whitening Deo Cream.png', '2024090512303380.jpg', 'PRODUCT_waA8yrs64jFo', 'Whitening Deo Cream', 'NRB', 190, 190, 1, 'novemae', 'COMPLETED'),
-(37, '2024/09/24 03:31:13', 'RZ5rqF8zmCQUkBA', 'Organic Onion Sticker.png', '2024090512285232.jpg', 'PRODUCT_I4Nj92X3gAUM', 'Organic Onion Sticker', 'Happy Noz Onion Stickers', 350, 350, 1, 'novemae', 'COMPLETED'),
-(38, '2024/09/24 03:33:40', 'dMelg83ByuzsAvj', 'Whitening Body Lotion.png', '2024090514481133.jpg', 'PRODUCT_WDSphiNwJj6a', 'Whitening Body Lotion', 'Glowrie', 280, 280, 1, 'mikha', 'COMPLETED'),
-(39, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', 'lemon juice drink.png', '2024090514512381.jpg', 'PRODUCT_kw0KWjVSUnRO', 'lemon juice drink', 'Gluta Lipo', 280, 280, 1, 'joana', 'COMPLETED'),
-(40, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', 'lemon juice drink.png', '2024090514512381.jpg', 'PRODUCT_kw0KWjVSUnRO', 'lemon juice drink', 'Gluta Lipo', 280, 280, 1, 'joana', 'COMPLETED'),
-(41, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', '', '', '', '', '', 0, 0, 1, 'joana', 'COMPLETED'),
-(42, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', '', '', '', '', '', 0, 0, 1, 'joana', 'COMPLETED'),
-(43, '2024/09/24 03:51:53', 'WqbaOiD7mfM3y9Y', '', '', '', '', '', 0, 0, 1, 'joana', 'COMPLETED'),
-(44, '2024/09/26 01:22:45', 'R6GoMvVCBJXx9dQ', 'Body soap.png', 'default.png', 'PRODUCT_gnVjI9e3C4TM', 'Body soap', 'Rosmar Kagayaku', 50, 50, 1, 'colet', 'COMPLETED'),
-(45, '2024/09/26 01:22:45', 'R6GoMvVCBJXx9dQ', 'Slimming Coffee.png', 'default.png', 'PRODUCT_5dWrQG0EtNxU', 'Slimming Coffee', 'LI-SHOU', 349.96, 349.96, 1, 'colet', 'COMPLETED'),
-(46, '2024/09/26 01:22:45', 'R6GoMvVCBJXx9dQ', 'Slimming Coffee.png', 'default.png', 'PRODUCT_5dWrQG0EtNxU', 'Slimming Coffee', 'LI-SHOU', 349.96, 349.96, 1, 'colet', 'COMPLETED');
-
+(43, '2024/11/29 05:46:26', 'KS2lE5XwxJ7p1D9', 'Vitruvi .png', 'default.png', 'PRODUCT_bzrtGEOs2nXR', 'Vitruvi ', 'Wardiere Beauty', 50, 500, 10, 'Vi', 'COMPLETED'),
+(44, '2024/11/29 05:46:26', 'KS2lE5XwxJ7p1D9', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', 'Radiant Glow Serum', 'Purely PH', 200, 2000, 10, 'Vi', 'COMPLETED'),
+(45, '2024/11/30 12:40:04', 'KJFdqkiNQphrnf1', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 560, 2, 'test', 'COMPLETED'),
+(46, '2024/11/30 01:44:42', 'oFA3mEGX9Nxuk2f', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 840, 3, 'Gian', 'COMPLETED'),
+(47, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 277200, 990, 'm', 'COMPLETED');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `in_stock`
+--
+ALTER TABLE `in_stock`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `out_stock`
+--
+ALTER TABLE `out_stock`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_accounts`
@@ -350,10 +374,22 @@ ALTER TABLE `tbl_transaction_ref`
 --
 
 --
+-- AUTO_INCREMENT for table `in_stock`
+--
+ALTER TABLE `in_stock`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `out_stock`
+--
+ALTER TABLE `out_stock`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `tbl_accounts`
 --
 ALTER TABLE `tbl_accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_brands`
@@ -365,19 +401,19 @@ ALTER TABLE `tbl_brands`
 -- AUTO_INCREMENT for table `tbl_cart`
 --
 ALTER TABLE `tbl_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `tbl_notification`
 --
 ALTER TABLE `tbl_notification`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `tbl_roles`
@@ -389,7 +425,7 @@ ALTER TABLE `tbl_roles`
 -- AUTO_INCREMENT for table `tbl_sales`
 --
 ALTER TABLE `tbl_sales`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_system_info`
@@ -401,7 +437,7 @@ ALTER TABLE `tbl_system_info`
 -- AUTO_INCREMENT for table `tbl_transaction_ref`
 --
 ALTER TABLE `tbl_transaction_ref`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

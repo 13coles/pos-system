@@ -63,10 +63,10 @@ $get->dt_css();
                     <div class="product_tab_button mt-5">
                         <ul class="nav" role="tablist">
                           <li>
-                            <a href="stock-in.php" class="btn">View Stock Out</a>
+                            <a href="stock-in.php" class="btn">View Stock In</a>
                           </li>
                           <li>
-                            <a href="stock-out.php" class="btn">View Stock In</a>
+                            <a href="stock-out.php" class="btn">View Stock Out</a>
                           </li>
                           <li>
                             <a href="print-inventory.php" rel="noopener" target="_blank" class="btn sm mb-3">
