@@ -113,8 +113,9 @@ $get->dt_css();
           // Loop through the data and append each row to the table
           if (data.length > 0) {
             data.forEach(function(item) {
+              var formattedDate = new Date(item.date_sold);
               var row = '<tr>';
-              row += '<td>' + item.date_sold + '</td>';
+              row += '<td>' +formattedDate.toLocaleDateString() + '</td>';
               row += '<td>' + item.product_name + '</td>';
               row += '<td>' + item.quantity + '</td>';
               row += '<td>' + item.status + '</td>';
@@ -129,6 +130,7 @@ $get->dt_css();
               "ordering": true,      
               "info": true,           
               "lengthMenu": [5, 10, 25, 50], 
+              "order": [[0, 'desc']],
             });
           } else {
             // If no data found, show a message

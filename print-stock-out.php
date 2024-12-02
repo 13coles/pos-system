@@ -57,23 +57,24 @@ window.addEventListener("load", function() {
 });
 
 function fetchStockOutData() {
-    fetch('fetch_stock_out.php')  // Replace with your PHP endpoint
+    fetch('fetch_stock_out.php')  
         .then(response => response.json())
         .then(data => {
             populateStockOutTable(data);
-            window.print();  // Automatically trigger the print dialog after the data is populated
+            window.print();  
         })
         .catch(error => console.error('Error fetching stock-in data:', error));
 }
 
 function populateStockOutTable(data) {
     const tableBody = document.getElementById('stock-in-body');
-    tableBody.innerHTML = '';  // Clear any existing rows
+    tableBody.innerHTML = ''; 
 
     data.forEach(item => {
         const row = document.createElement('tr');
+        const formattedDate = new Date(item.date_sold).toLocaleDateString();
         row.innerHTML = `
-            <td>${item.date_sold}</td>
+            <td>${formattedDate}</td>
             <td>${item.product_name}</td>
             <td>${item.quantity}</td>
             <td>${item.status}</td>

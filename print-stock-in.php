@@ -56,23 +56,25 @@ window.addEventListener("load", function() {
 });
 
 function fetchStockInData() {
-    fetch('fetch_stock_in.php')  // Replace with your PHP endpoint
+    fetch('fetch_stock_in.php')  
         .then(response => response.json())
         .then(data => {
             populateStockInTable(data);
-            window.print();  // Automatically trigger the print dialog after the data is populated
+            window.print();  
         })
         .catch(error => console.error('Error fetching stock-in data:', error));
 }
 
 function populateStockInTable(data) {
     const tableBody = document.getElementById('stock-in-body');
-    tableBody.innerHTML = '';  // Clear any existing rows
+    tableBody.innerHTML = ''; 
 
     data.forEach(item => {
         const row = document.createElement('tr');
+        const formattedDate = new Date(item.date_added).toLocaleDateString(); 
+
         row.innerHTML = `
-            <td>${item.date_added}</td>
+            <td>${formattedDate}</td>
             <td>${item.batch_number}</td>
             <td>${item.product_name}</td>
             <td>${item.quantity}</td>
@@ -80,6 +82,8 @@ function populateStockInTable(data) {
         tableBody.appendChild(row);
     });
 }
+
+
 </script>
 
 </body>

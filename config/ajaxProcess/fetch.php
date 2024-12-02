@@ -143,8 +143,17 @@ if (isset($_POST['action'])) {
     }
 }
 
-
-  #=DELETION PROCESSS END
+// Function to determine product status
+function determineProductStatus($quantity) {
+  if ($quantity == 0) {
+      return 'OUT OF STOCK';
+  } elseif ($quantity <= 10) {
+      return 'LOW STOCK';
+  } else {
+      return 'IN STOCK';
+  }
+}
+  #=INSERT SALES
 
   if ($_POST['action'] == 'IR_tbl_sales') {
     $customer = mysqli_real_escape_string($conn, $_POST['customer']);
@@ -176,17 +185,18 @@ if (isset($_POST['action'])) {
             $db_qty = $db_row['product_qty'];
             $new_product_qty = $db_qty - $qty; // Subtract the sold quantity
 
-            // Check if product stock is low (<= 11)
-            if ($new_product_qty <= 11) {
-                $title = "PRODUCT LOW ON STOCKS!";
-                $message = "The product " . $db_row['product_name'] . ", has only (" . $new_product_qty . "pcs.) remaining. Please restock soon.";
-                $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
-                $result_notif = mysqli_query($conn, $query_notif);
-            }
+            // Update product quantity and status
+            $status = determineProductStatus($new_product_qty);
+            $query_update = "UPDATE `tbl_products` SET `product_qty`='$new_product_qty', `status`='$status' WHERE `product_id`='$product_id'";
+            mysqli_query($conn, $query_update);
 
-            // Update the product quantity in tbl_products
-            $query4 = "UPDATE `tbl_products` SET `product_qty`='$new_product_qty' WHERE `product_id`='$product_id'";
-            $result4 = mysqli_query($conn, $query4);
+            // Insert low stock notification
+            if ($status == 'LOW STOCK') {
+              $title = "PRODUCT LOW ON STOCKS!";
+              $message = "The product " . $db_row['product_name'] . " has only (" . $new_product_qty . "pcs.) remaining. Please restock soon.";
+              $query_notif = "INSERT INTO `tbl_notification`(`id`, `notif_name`, `notif_desc`) VALUES (NULL, '$title', '$message')";
+              mysqli_query($conn, $query_notif);
+            }
 
             // Insert record into out_stock table
             $query_out_stock = "INSERT INTO `out_stock` (`product_name`, `quantity`, `date_sold`) 
