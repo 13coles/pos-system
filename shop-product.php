@@ -288,7 +288,6 @@ $get->dt_css();
                     <th>Image</th>
                     <th>Product Name</th>
                     <th>Price</th>
-                    <th>Available Quantity</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

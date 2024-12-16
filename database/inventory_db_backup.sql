@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2024 at 05:19 PM
+-- Generation Time: Dec 16, 2024 at 04:46 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -47,7 +47,10 @@ INSERT INTO `in_stock` (`id`, `date_added`, `batch_number`, `product_name`, `qua
 (11, '2024-11-29 20:40:20', 'BATCH_gqzbIwPt', 'Vitruvi ', 310),
 (12, '2024-11-29 20:46:28', 'BATCH_c26QUuY4', ' Glow Serum', 100),
 (13, '2024-11-30 17:18:57', 'BATCH_eFgGZoAw', ' Glow Serum', 505),
-(14, '2024-11-30 23:57:50', 'BATCH_pszvuVPY', ' Glow Serum', 100);
+(14, '2024-11-30 23:57:50', 'BATCH_pszvuVPY', ' Glow Serum', 100),
+(15, '2024-12-02 00:34:43', 'BATCH_IpxNCwao', 'Vitruvi ', 91),
+(16, '2024-12-02 01:12:48', 'BATCH_FH6cqCk1', ' Glow Serum', 91),
+(17, '2024-12-02 01:13:07', 'BATCH_u4xeNGLS', 'Vitruvi ', 91);
 
 -- --------------------------------------------------------
 
@@ -74,7 +77,10 @@ INSERT INTO `out_stock` (`id`, `product_name`, `quantity`, `date_sold`, `status`
 (5, ' Glow Serum', 3, '2024-11-30 01:44:42', 'sold'),
 (8, ' Glow Serum', 100, '2024-11-30 23:22:34', 'expired'),
 (9, ' Glow Serum', 990, '2024-12-02 12:07:48', 'sold'),
-(10, ' Glow Serum', 1, '2024-12-02 00:15:53', 'expired');
+(10, ' Glow Serum', 1, '2024-12-02 00:15:53', 'expired'),
+(11, 'Vitruvi ', 491, '2024-12-02 12:22:21', 'sold'),
+(12, 'Vitruvi ', 81, '2024-12-02 12:35:05', 'sold'),
+(13, 'Vitruvi ', 10, '2024-12-02 12:35:33', 'sold');
 
 -- --------------------------------------------------------
 
@@ -148,6 +154,13 @@ CREATE TABLE `tbl_cart` (
   `product_qty` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `tbl_cart`
+--
+
+INSERT INTO `tbl_cart` (`id`, `qr_code`, `product_img`, `product_id`, `product_name`, `product_brand`, `product_price`, `subtotal`, `product_qty`) VALUES
+(78, 'Vitruvi .png', 'default.png', 'PRODUCT_bzrtGEOs2nXR', 'Vitruvi ', 'Wardiere Beauty', 35, 35, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -159,14 +172,6 @@ CREATE TABLE `tbl_notification` (
   `notif_name` varchar(50) NOT NULL,
   `notif_desc` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `tbl_notification`
---
-
-INSERT INTO `tbl_notification` (`id`, `notif_name`, `notif_desc`) VALUES
-(55, 'PRODUCT LOW ON STOCKS!', 'The product  Glow Serum, has only (10pcs.) remaining. Please restock soon.'),
-(56, 'PRODUCT LOW ON STOCKS!', 'The product  Glow Serum, has only (9pcs.) remaining.\r\n                Please restock soon.');
 
 -- --------------------------------------------------------
 
@@ -194,8 +199,8 @@ CREATE TABLE `tbl_products` (
 --
 
 INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `exp_date`, `product_price`, `in_sale`, `product_qty`, `status`, `qr_code`) VALUES
-(138, '2024-11-29 12:41:01', 'PRODUCT_bzrtGEOs2nXR', 'default.png', 'Wardiere Beauty', 'Vitruvi ', '2028-11-29', 60, 35.00, 500, 'IN STOCK', 'Vitruvi .png'),
-(139, '2024-12-01 16:15:53', 'PRODUCT_PGDL5oRK0zyr', 'default.png', 'Bella Skin', ' Glow Serum', '2030-12-29', 500, 280.00, 9, 'LOW STOCK', 'Radiant Glow Serum.png');
+(138, '2024-12-01 17:13:07', 'PRODUCT_bzrtGEOs2nXR', 'default.png', 'Wardiere Beauty', 'Vitruvi ', '2028-11-29', 60, 35.00, 100, 'IN STOCK', 'Vitruvi .png'),
+(139, '2024-12-01 17:12:48', 'PRODUCT_PGDL5oRK0zyr', 'default.png', 'Bella Skin', ' Glow Serum', '2030-12-29', 500, 280.00, 100, 'IN STOCK', 'Radiant Glow Serum.png');
 
 -- --------------------------------------------------------
 
@@ -239,7 +244,10 @@ INSERT INTO `tbl_sales` (`id`, `date_purchased`, `transaction_id`, `customer`, `
 (7, '2024/11/29 05:46:26', 'KS2lE5XwxJ7p1D9', 'Vi', 2500, 'COMPLETED'),
 (8, '2024/11/30 12:40:04', 'KJFdqkiNQphrnf1', 'test', 560, 'COMPLETED'),
 (9, '2024/11/30 01:44:42', 'oFA3mEGX9Nxuk2f', 'Gian', 840, 'COMPLETED'),
-(10, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'm', 277200, 'COMPLETED');
+(10, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'm', 277200, 'COMPLETED'),
+(11, '2024/12/02 12:22:21', 'P7ATn4pYUbr1Cq3', 'cv', 17185, 'COMPLETED'),
+(12, '2024/12/02 12:35:05', 'uaAdytBOXiHVTPC', 'v', 2835, 'IN STOCK'),
+(13, '2024/12/02 12:35:33', 'bGpgA19tdcMRF2L', 'nm', 350, 'LOW STOCK');
 
 -- --------------------------------------------------------
 
@@ -297,7 +305,10 @@ INSERT INTO `tbl_transaction_ref` (`id`, `date_purchased`, `transaction_id`, `qr
 (44, '2024/11/29 05:46:26', 'KS2lE5XwxJ7p1D9', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', 'Radiant Glow Serum', 'Purely PH', 200, 2000, 10, 'Vi', 'COMPLETED'),
 (45, '2024/11/30 12:40:04', 'KJFdqkiNQphrnf1', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 560, 2, 'test', 'COMPLETED'),
 (46, '2024/11/30 01:44:42', 'oFA3mEGX9Nxuk2f', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 840, 3, 'Gian', 'COMPLETED'),
-(47, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 277200, 990, 'm', 'COMPLETED');
+(47, '2024/12/02 12:07:48', 'Nce394HoyFdLBws', 'Radiant Glow Serum.png', 'default.png', 'PRODUCT_PGDL5oRK0zyr', ' Glow Serum', 'Bella Skin', 280, 277200, 990, 'm', 'COMPLETED'),
+(48, '2024/12/02 12:22:21', 'P7ATn4pYUbr1Cq3', 'Vitruvi .png', 'default.png', 'PRODUCT_bzrtGEOs2nXR', 'Vitruvi ', 'Wardiere Beauty', 35, 17185, 491, 'cv', 'COMPLETED'),
+(49, '2024/12/02 12:35:05', 'uaAdytBOXiHVTPC', 'Vitruvi .png', 'default.png', 'PRODUCT_bzrtGEOs2nXR', 'Vitruvi ', 'Wardiere Beauty', 35, 2835, 81, 'v', 'COMPLETED'),
+(50, '2024/12/02 12:35:33', 'bGpgA19tdcMRF2L', 'Vitruvi .png', 'default.png', 'PRODUCT_bzrtGEOs2nXR', 'Vitruvi ', 'Wardiere Beauty', 35, 350, 10, 'nm', 'COMPLETED');
 
 --
 -- Indexes for dumped tables
@@ -377,13 +388,13 @@ ALTER TABLE `tbl_transaction_ref`
 -- AUTO_INCREMENT for table `in_stock`
 --
 ALTER TABLE `in_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `out_stock`
 --
 ALTER TABLE `out_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbl_accounts`
@@ -401,13 +412,13 @@ ALTER TABLE `tbl_brands`
 -- AUTO_INCREMENT for table `tbl_cart`
 --
 ALTER TABLE `tbl_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `tbl_notification`
 --
 ALTER TABLE `tbl_notification`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `tbl_products`
@@ -425,7 +436,7 @@ ALTER TABLE `tbl_roles`
 -- AUTO_INCREMENT for table `tbl_sales`
 --
 ALTER TABLE `tbl_sales`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbl_system_info`
@@ -437,7 +448,7 @@ ALTER TABLE `tbl_system_info`
 -- AUTO_INCREMENT for table `tbl_transaction_ref`
 --
 ALTER TABLE `tbl_transaction_ref`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

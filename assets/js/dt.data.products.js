@@ -30,7 +30,6 @@ $(function () {
           }
         },
       },
-      { data: "product_qty" },
       {
         render: function (data, type, row) {
           var typeOf = `${row.status}`;
@@ -56,9 +55,17 @@ $(function () {
                         <i class="bx bx-dots-vertical-rounded"></i>
                       </button>
                       <div class="dropdown-menu" style="">
-                        <button type="button" class="dropdown-item" id="${row.id}" data-bs-toggle="modal" data-bs-target="#modal_edit_${row.id}_product" title="Edit"><i class="bx bx-pencil"></i> Edit</button>
-                        <button type="button" class="dropdown-item btn-cont" id="${row.id}" name="PRODUCT" data-bs-toggle="modal" data-bs-target="#modal_delete" title="Delete"><i class="bx bx-trash"></i> Delete</button>
+                        <button type="button" class="dropdown-item" id="${row.id}" data-bs-toggle="modal" data-bs-target="#modal_edit_${row.id}_product" title="Edit">
+                          <i class="bx bx-pencil"></i> Edit
+                        </button>
+                        <button type="button" class="dropdown-item btn-cont" id="${row.id}" name="PRODUCT" data-bs-toggle="modal" data-bs-target="#modal_delete" title="Delete">
+                          <i class="bx bx-trash"></i> Delete
+                        </button>
+                        <a href="stock-in.php" class="dropdown-item" title="View">
+                          <i class="bx bx-show"></i> View
+                        </a>
                       </div>
+
                     </div>`;
           return btn;
         },
@@ -109,25 +116,3 @@ $(function () {
     });
   }
 });
-
-// UN COMMENT ONLY IF YOU INTEND TO USE THIS FOR A  Function to update product quantities every 3 seconds
-//  setInterval(function () {
-//   $.ajax({
-//     url: "config/ajaxProcess/fetch.php",
-//     method: "GET",
-//     data: { action: "GR_tbl_product_quantities" },
-//     dataType: "json",
-//     success: function (data) {
-//       data.forEach(function (product) {
-//         var row = $('#table_products').DataTable().row(function (idx, rowData, node) {
-//           return rowData.id == product.id;
-//         });
-//         if (row) {
-//           row.data().product_qty = product.product_qty;
-//           row.invalidate(); 
-//         }
-//       });
-//       $('#table_products').DataTable().draw(false);
-//     }
-//   });
-// }, 3000);

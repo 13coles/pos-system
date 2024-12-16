@@ -35,6 +35,7 @@
                   <li><a href="shop-product.php">Product Management</a></li>
                   <li><a href="generate-reports.php">Generate QR</a></li>
                   <li><a href="sales.php">Sales</a></li>
+                  <li><a href="inventory.php">inventory</a></li>
                 </ul>
               </li>
               <li class="menu-item-has-children">
