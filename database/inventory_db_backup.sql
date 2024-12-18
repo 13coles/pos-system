@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2024 at 04:46 PM
+-- Generation Time: Dec 18, 2024 at 09:38 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `in_stock` (
   `id` int(11) NOT NULL,
   `date_added` datetime NOT NULL,
+  `product_id` varchar(100) NOT NULL,
   `batch_number` varchar(50) NOT NULL,
   `product_name` varchar(255) NOT NULL,
   `quantity` int(11) NOT NULL
@@ -39,18 +40,11 @@ CREATE TABLE `in_stock` (
 -- Dumping data for table `in_stock`
 --
 
-INSERT INTO `in_stock` (`id`, `date_added`, `batch_number`, `product_name`, `quantity`) VALUES
-(7, '2024-11-29 17:43:34', 'BATCH_0tJ6kHim', 'Vitruvi ', 100),
-(8, '2024-11-29 17:43:58', 'BATCH_6zhTIiO8', 'Vitruvi ', 100),
-(9, '2024-11-29 17:44:51', 'BATCH_DiY7cE3J', ' Glow Serum', 300),
-(10, '2024-11-29 20:38:40', 'BATCH_MAuPSN61', ' Glow Serum', 110),
-(11, '2024-11-29 20:40:20', 'BATCH_gqzbIwPt', 'Vitruvi ', 310),
-(12, '2024-11-29 20:46:28', 'BATCH_c26QUuY4', ' Glow Serum', 100),
-(13, '2024-11-30 17:18:57', 'BATCH_eFgGZoAw', ' Glow Serum', 505),
-(14, '2024-11-30 23:57:50', 'BATCH_pszvuVPY', ' Glow Serum', 100),
-(15, '2024-12-02 00:34:43', 'BATCH_IpxNCwao', 'Vitruvi ', 91),
-(16, '2024-12-02 01:12:48', 'BATCH_FH6cqCk1', ' Glow Serum', 91),
-(17, '2024-12-02 01:13:07', 'BATCH_u4xeNGLS', 'Vitruvi ', 91);
+INSERT INTO `in_stock` (`id`, `date_added`, `product_id`, `batch_number`, `product_name`, `quantity`) VALUES
+(57, '2024-12-18 16:21:36', '', 'BATCH_2GY31ofs', 'Vitruvi ', 100),
+(58, '2024-12-18 16:22:01', '', 'BATCH_EfLVNuei', 'Radiant Glow Serum', 100),
+(59, '2024-12-18 16:22:17', 'PRODUCT_zFOhGWtorlPS', 'BATCH_kJI0xGgi', 'Vitruvi ', 100),
+(60, '2024-12-18 16:24:30', 'PRODUCT_MdgxcW0uNU8v', 'BATCH_oHZNyekx', 'Power soap', 1000);
 
 -- --------------------------------------------------------
 
@@ -63,24 +57,19 @@ CREATE TABLE `out_stock` (
   `product_name` varchar(255) NOT NULL,
   `quantity` int(11) NOT NULL,
   `date_sold` datetime NOT NULL,
-  `status` enum('sold','expired') DEFAULT 'sold'
+  `product_id` varchar(100) NOT NULL,
+  `reason` enum('sold','expired','damage','return') DEFAULT 'sold'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `out_stock`
 --
 
-INSERT INTO `out_stock` (`id`, `product_name`, `quantity`, `date_sold`, `status`) VALUES
-(2, 'Vitruvi ', 10, '2024-11-29 05:46:26', 'sold'),
-(3, ' Glow Serum', 10, '2024-11-29 05:46:26', 'sold'),
-(4, ' Glow Serum', 2, '2024-11-30 12:40:04', 'sold'),
-(5, ' Glow Serum', 3, '2024-11-30 01:44:42', 'sold'),
-(8, ' Glow Serum', 100, '2024-11-30 23:22:34', 'expired'),
-(9, ' Glow Serum', 990, '2024-12-02 12:07:48', 'sold'),
-(10, ' Glow Serum', 1, '2024-12-02 00:15:53', 'expired'),
-(11, 'Vitruvi ', 491, '2024-12-02 12:22:21', 'sold'),
-(12, 'Vitruvi ', 81, '2024-12-02 12:35:05', 'sold'),
-(13, 'Vitruvi ', 10, '2024-12-02 12:35:33', 'sold');
+INSERT INTO `out_stock` (`id`, `product_name`, `quantity`, `date_sold`, `product_id`, `reason`) VALUES
+(25, 'Power soap', 200, '2024-12-18 16:25:20', '0', 'expired'),
+(26, 'Power soap', 500, '2024-12-18 16:26:01', 'PRODUCT_MdgxcW0uNU8v', 'expired'),
+(27, 'Vitruvi ', 10, '2024-12-18 16:26:12', 'PRODUCT_zFOhGWtorlPS', 'damage'),
+(28, 'Radiant Glow Serum', 50, '2024-12-18 16:26:21', 'PRODUCT_Bynw3OGCd0pi', 'return');
 
 -- --------------------------------------------------------
 
@@ -173,6 +162,13 @@ CREATE TABLE `tbl_notification` (
   `notif_desc` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `tbl_notification`
+--
+
+INSERT INTO `tbl_notification` (`id`, `notif_name`, `notif_desc`) VALUES
+(59, 'PRODUCT LOW ON STOCKS!', 'The product Radiant Glow Serum has only 9 pcs remaining. Please restock soon.');
+
 -- --------------------------------------------------------
 
 --
@@ -199,8 +195,9 @@ CREATE TABLE `tbl_products` (
 --
 
 INSERT INTO `tbl_products` (`id`, `date_posted`, `product_id`, `product_img`, `product_brand`, `product_name`, `exp_date`, `product_price`, `in_sale`, `product_qty`, `status`, `qr_code`) VALUES
-(138, '2024-12-01 17:13:07', 'PRODUCT_bzrtGEOs2nXR', 'default.png', 'Wardiere Beauty', 'Vitruvi ', '2028-11-29', 60, 35.00, 100, 'IN STOCK', 'Vitruvi .png'),
-(139, '2024-12-01 17:12:48', 'PRODUCT_PGDL5oRK0zyr', 'default.png', 'Bella Skin', ' Glow Serum', '2030-12-29', 500, 280.00, 100, 'IN STOCK', 'Radiant Glow Serum.png');
+(147, '2024-12-18 08:26:12', 'PRODUCT_zFOhGWtorlPS', 'default.png', 'Wardiere Beauty', 'Vitruvi ', '2025-01-11', 200, NULL, 190, 'IN STOCK', 'Vitruvi .png'),
+(149, '2024-12-18 08:26:21', 'PRODUCT_Bynw3OGCd0pi', 'default.png', 'Radiance Glow', 'Radiant Glow Serum', '2024-12-28', 50, NULL, 50, 'IN STOCK', 'Radiant Glow Serum.png'),
+(150, '2024-12-18 08:26:01', 'PRODUCT_MdgxcW0uNU8v', 'default.png', 'Purely PH', 'Power soap', '2024-12-03', 200, NULL, 300, 'IN STOCK', 'Power soap.png');
 
 -- --------------------------------------------------------
 
@@ -388,13 +385,13 @@ ALTER TABLE `tbl_transaction_ref`
 -- AUTO_INCREMENT for table `in_stock`
 --
 ALTER TABLE `in_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `out_stock`
 --
 ALTER TABLE `out_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `tbl_accounts`
@@ -418,13 +415,13 @@ ALTER TABLE `tbl_cart`
 -- AUTO_INCREMENT for table `tbl_notification`
 --
 ALTER TABLE `tbl_notification`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
 
 --
 -- AUTO_INCREMENT for table `tbl_roles`

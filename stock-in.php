@@ -51,6 +51,8 @@ $get->dt_css();
                         <div class="section_title mt-5">
                             <h2><i class='bx bx-registered pb-1'></i> Stock In</h2>
                         </div>
+            
+
                         <div class="product_tab_button mt-5">
                             <ul class="nav" role="tablist">
                                 <li>
@@ -67,7 +69,45 @@ $get->dt_css();
                             </ul>
                         </div>
                     </div>
+                    <form action="process_stock_in.php" method="POST" id="stock-in-form" class="mb-3">
+                        <div class="row g-2 align-items-end">
+                            <!-- Select Product -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Select Product</label>
+                                    <select name="product_id" class="form-control" required>
+                                        <option value="" disabled selected>Select a product</option>
+                                        <?php
+                                        // Assuming you have a function to get products from the database
+                                        $products = $db->GR_products(); 
+                                        while ($product = mysqli_fetch_assoc($products)) {
+                                            echo "<option value='{$product['product_id']}'>{$product['product_name']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Input Quantity -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="quantity" class="form-label">Input Quantity</label>
+                                    <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Enter Quantity" required>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-dark" style="height: 38px; margin-top: 32px;">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
                     <div class="container-fluid">
+                        <?php include './util/session.php'?>
                         <div class="table-responsive">
                             <table class="table text-center" id="stock-in-table" width="100%">
                                 <thead>
@@ -128,12 +168,12 @@ $get->dt_css();
                     
                     // Initialize DataTables after data is added
                     $('#stock-in-table').DataTable({
-                        "paging": true,         // Enable pagination
-                        "searching": true,      // Enable search functionality
-                        "ordering": true,       // Enable sorting
-                        "info": true,           // Show table info
-                        "lengthMenu": [5, 10, 25, 50], // Page length options
-                        "order": [[0, 'desc']],
+                        "paging": true,       
+                        "searching": true,     
+                        "ordering": true,     
+                        "info": true,           
+                        "lengthMenu": [5, 10, 25, 50],
+                        "order": [[2, 'desc']],
                     });
                 } else {
                     // If no data found, show a message

@@ -75,7 +75,6 @@ $get->dt_css();
                                 <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($sale['transaction_id']); ?></td>
                                 <td style="text-align: center; vertical-align: middle; font-size:12px;"><?php echo htmlspecialchars($sale['total']); ?></td>
                             </tr>
-                            <?php $overall_sales += floatval($sale['total']); // Add to the overall total ?>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>

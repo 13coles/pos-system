@@ -2,7 +2,7 @@
 include './config/conn.php';
 
 // SQL query to fetch stock-out data, including the status
-$sql = "SELECT date_sold, product_name, quantity, status FROM out_stock ORDER BY date_sold DESC";
+$sql = "SELECT date_sold, product_name, quantity, reason FROM out_stock ORDER BY date_sold DESC";
 
 // Execute the query
 $result = $conn->query($sql);
@@ -17,7 +17,7 @@ if ($result->num_rows > 0) {
             'date_sold' => date('M d, Y', strtotime($row['date_sold'])),
             'product_name' => $row['product_name'],
             'quantity' => $row['quantity'],
-            'status' => $row['status'] // Include the status in the response
+            'reason' => $row['reason'] 
         ];
     }
 } else {

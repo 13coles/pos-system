@@ -84,7 +84,7 @@ $get->dt_css();
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Total Qty</th>
-                                    <th>Sold Qty</th>
+                                    <th>Sold / Remove Qty</th>
                                     <th>Available Qty</th>
                                 </tr>
                             </thead>

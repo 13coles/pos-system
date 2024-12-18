@@ -63,8 +63,58 @@ $get->dt_css();
                       </ul>
               
                     </div>
+                    
                 </div>
+                <form action="process_stock_out.php" method="POST" class="mb-3">
+                        <div class="row g-2 align-items-end">
+                            <!-- Select Product -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">Select Product</label>
+                                    <select name="product_id" class="form-control" required>
+                                        <option value="" disabled selected>Select a product</option>
+                                        <?php
+                                        // Assuming you have a function to get products from the database
+                                        $products = $db->GR_products(); 
+                                        while ($product = mysqli_fetch_assoc($products)) {
+                                            echo "<option value='{$product['product_id']}'>{$product['product_name']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Input Quantity -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="quantity" class="form-label">Input Quantity</label>
+                                    <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Enter Quantity" required>
+                                </div>
+                            </div>
+
+                              <!-- Select Status-->
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">Select Status</label>
+                                    <select name="reason" class="form-control" required>
+                                        <option value="" disabled selected>Select a status</option>
+                                        <option value="damage">Damage</option>
+                                        <option value="expired">Expired</option>
+                                        <option value="return">Return</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-dark" style="height: 38px; margin-top: 32px;">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 <div class="container-fluid">
+                <?php include './util/session.php'?>
                     <div class="table-responsive">
                         <table class="table text-center" id="stock-out-table" width="100%">
                             <thead>
@@ -118,7 +168,7 @@ $get->dt_css();
               row += '<td>' +formattedDate.toLocaleDateString() + '</td>';
               row += '<td>' + item.product_name + '</td>';
               row += '<td>' + item.quantity + '</td>';
-              row += '<td>' + item.status + '</td>';
+              row += '<td>' + item.reason + '</td>';
               row += '</tr>';
               $('#stock-out-body').append(row);
             });

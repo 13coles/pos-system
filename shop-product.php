@@ -147,12 +147,12 @@ $get->dt_css();
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                   <label class="col-md-4 col-lg-3 col-form-label">Quantity</label>
                   <div class="col-md-8 col-lg-9">
                     <input name="product_qty" type="number" class="form-control" min="0" value="<?php echo $row_info['product_qty']; ?>" style="width: auto">
                   </div>
-                </div>
+                </div> -->
 
               </div>
               <div class="modal-footer">
